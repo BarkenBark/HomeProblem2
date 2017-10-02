@@ -1,0 +1,327 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=0.75\figurewidth,
+height=\figureheight,
+at={(0\figurewidth,0\figureheight)},
+scale only axis,
+xmin=0,
+xmax=20,
+ymin=0,
+ymax=20,
+axis background/.style={fill=white},
+axis x line*=bottom,
+axis y line*=left,
+xmajorgrids,
+ymajorgrids
+]
+\draw[draw=black] (axis cs:0.00540000000000002,17.9866) rectangle (axis cs:0.5054,18.4866);
+\draw[draw=black] (axis cs:0.1839,14.9976) rectangle (axis cs:0.6839,15.4976);
+\draw[draw=black] (axis cs:0.4877,8.0637) rectangle (axis cs:0.9877,8.5637);
+\draw[draw=black] (axis cs:0.8854,16.3138) rectangle (axis cs:1.3854,16.8138);
+\draw[draw=black] (axis cs:1.332,17.053) rectangle (axis cs:1.832,17.553);
+\draw[draw=black] (axis cs:1.8413,9.0424) rectangle (axis cs:2.3413,9.5424);
+\draw[draw=black] (axis cs:2.0131,5.0892) rectangle (axis cs:2.5131,5.5892);
+\draw[draw=black] (axis cs:2.3873,2.3925) rectangle (axis cs:2.8873,2.8925);
+\draw[draw=black] (axis cs:2.754,19.3212) rectangle (axis cs:3.254,19.8212);
+\draw[draw=black] (axis cs:3.4184,14.5518) rectangle (axis cs:3.9184,15.0518);
+\draw[draw=black] (axis cs:3.613,13.4508) rectangle (axis cs:4.113,13.9508);
+\draw[draw=black] (axis cs:3.9565,9.5724) rectangle (axis cs:4.4565,10.0724);
+\draw[draw=black] (axis cs:4.5853,1.8444) rectangle (axis cs:5.0853,2.3444);
+\draw[draw=black] (axis cs:4.7285,2.9096) rectangle (axis cs:5.2285,3.4096);
+\draw[draw=black] (axis cs:5.1254,17.3881) rectangle (axis cs:5.6254,17.8881);
+\draw[draw=black] (axis cs:5.6925,5.786) rectangle (axis cs:6.1925,6.286);
+\draw[draw=black] (axis cs:5.8951,3.5632) rectangle (axis cs:6.3951,4.0632);
+\draw[draw=black] (axis cs:6.5282,10.7625) rectangle (axis cs:7.0282,11.2625);
+\draw[draw=black] (axis cs:6.6723,7.5319) rectangle (axis cs:7.1723,8.0319);
+\draw[draw=black] (axis cs:7.3191,0.6878) rectangle (axis cs:7.8191,1.1878);
+\draw[draw=black] (axis cs:7.569,12.9197) rectangle (axis cs:8.069,13.4197);
+\draw[draw=black] (axis cs:8.0832,5.6661) rectangle (axis cs:8.5832,6.1661);
+\draw[draw=black] (axis cs:8.3372,7.5803) rectangle (axis cs:8.8372,8.0803);
+\draw[draw=black] (axis cs:8.8724,14.3389) rectangle (axis cs:9.3724,14.8389);
+\draw[draw=black] (axis cs:9.1576,9.4666) rectangle (axis cs:9.6576,9.9666);
+\draw[draw=black] (axis cs:9.4708,7.8654) rectangle (axis cs:9.9708,8.3654);
+\draw[draw=black] (axis cs:9.9162,18.9205) rectangle (axis cs:10.4162,19.4205);
+\draw[draw=black] (axis cs:10.4887,1.759) rectangle (axis cs:10.9887,2.259);
+\draw[draw=black] (axis cs:10.6854,4.9313) rectangle (axis cs:11.1854,5.4313);
+\draw[draw=black] (axis cs:11.1207,6.9906) rectangle (axis cs:11.6207,7.4906);
+\draw[draw=black] (axis cs:11.4918,13.4374) rectangle (axis cs:11.9918,13.9374);
+\draw[draw=black] (axis cs:11.8026,4.4686) rectangle (axis cs:12.3026,4.9686);
+\draw[draw=black] (axis cs:12.3885,11.85) rectangle (axis cs:12.8885,12.35);
+\draw[draw=black] (axis cs:12.845,13.4456) rectangle (axis cs:13.345,13.9456);
+\draw[draw=black] (axis cs:13.1033,17.1024) rectangle (axis cs:13.6033,17.6024);
+\draw[draw=black] (axis cs:13.6294,3.6979) rectangle (axis cs:14.1294,4.1979);
+\draw[draw=black] (axis cs:14.0174,15.6151) rectangle (axis cs:14.5174,16.1151);
+\draw[draw=black] (axis cs:14.302,16.9989) rectangle (axis cs:14.802,17.4989);
+\draw[draw=black] (axis cs:14.7237,12.9745) rectangle (axis cs:15.2237,13.4745);
+\draw[draw=black] (axis cs:15.0341,1.1955) rectangle (axis cs:15.5341,1.6955);
+\draw[draw=black] (axis cs:15.3261,11.877) rectangle (axis cs:15.8261,12.377);
+\draw[draw=black] (axis cs:15.8813,13.9529) rectangle (axis cs:16.3813,14.4529);
+\draw[draw=black] (axis cs:16.1888,15.7584) rectangle (axis cs:16.6888,16.2584);
+\draw[draw=black] (axis cs:16.5321,9.1834) rectangle (axis cs:17.0321,9.6834);
+\draw[draw=black] (axis cs:17.1428,12.7192) rectangle (axis cs:17.6428,13.2192);
+\draw[draw=black] (axis cs:17.2639,6.2328) rectangle (axis cs:17.7639,6.7328);
+\draw[draw=black] (axis cs:17.6987,7.3063) rectangle (axis cs:18.1987,7.8063);
+\draw[draw=black] (axis cs:18.1458,3.2612) rectangle (axis cs:18.6458,3.7612);
+\draw[draw=black] (axis cs:18.7196,19.1065) rectangle (axis cs:19.2196,19.6065);
+\draw[draw=black] (axis cs:18.8428,16.2953) rectangle (axis cs:19.3428,16.7953);
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+9.7208	8.1154\\
+8.5872	7.8303\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+8.5872	7.8303\\
+6.9223	7.7819\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+6.9223	7.7819\\
+5.9425	6.036\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+5.9425	6.036\\
+8.3332	5.9161\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+8.3332	5.9161\\
+10.9354	5.1813\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+10.9354	5.1813\\
+12.0526	4.7186\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+12.0526	4.7186\\
+13.8794	3.9479\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+13.8794	3.9479\\
+15.2841	1.4455\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+15.2841	1.4455\\
+18.3958	3.5112\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+18.3958	3.5112\\
+17.5139	6.4828\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+17.5139	6.4828\\
+17.9487	7.5563\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+17.9487	7.5563\\
+16.7821	9.4334\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+16.7821	9.4334\\
+15.5761	12.127\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+15.5761	12.127\\
+14.9737	13.2245\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+14.9737	13.2245\\
+16.1313	14.2029\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+16.1313	14.2029\\
+17.3928	12.9692\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+17.3928	12.9692\\
+19.0928	16.5453\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+19.0928	16.5453\\
+18.9696	19.3565\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+18.9696	19.3565\\
+16.4388	16.0084\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+16.4388	16.0084\\
+14.2674	15.8651\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+14.2674	15.8651\\
+14.552	17.2489\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+14.552	17.2489\\
+13.3533	17.3524\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+13.3533	17.3524\\
+10.1662	19.1705\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+10.1662	19.1705\\
+5.3754	17.6381\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+5.3754	17.6381\\
+3.004	19.5712\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+3.004	19.5712\\
+0.2554	18.2366\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+0.2554	18.2366\\
+1.582	17.303\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+1.582	17.303\\
+1.1354	16.5638\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+1.1354	16.5638\\
+0.4339	15.2476\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+0.4339	15.2476\\
+3.6684	14.8018\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+3.6684	14.8018\\
+3.863	13.7008\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+3.863	13.7008\\
+4.2065	9.8224\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+4.2065	9.8224\\
+2.0913	9.2924\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+2.0913	9.2924\\
+0.7377	8.3137\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+0.7377	8.3137\\
+2.2631	5.3392\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+2.2631	5.3392\\
+2.6373	2.6425\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+2.6373	2.6425\\
+4.8353	2.0944\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+4.8353	2.0944\\
+4.9785	3.1596\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+4.9785	3.1596\\
+6.1451	3.8132\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+6.1451	3.8132\\
+7.5691	0.9378\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+7.5691	0.9378\\
+10.7387	2.009\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+10.7387	2.009\\
+11.3707	7.2406\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+11.3707	7.2406\\
+12.6385	12.1\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+12.6385	12.1\\
+13.095	13.6956\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+13.095	13.6956\\
+11.7418	13.6874\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+11.7418	13.6874\\
+9.1224	14.5889\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+9.1224	14.5889\\
+7.819	13.1697\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+7.819	13.1697\\
+6.7782	11.0125\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+6.7782	11.0125\\
+9.4076	9.7166\\
+};
+\addplot [color=mycolor1, forget plot]
+  table[row sep=crcr]{%
+9.4076	9.7166\\
+9.7208	8.1154\\
+};
+\end{axis}
+\end{tikzpicture}%
