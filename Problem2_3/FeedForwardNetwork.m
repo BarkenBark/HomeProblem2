@@ -15,8 +15,13 @@ classdef FeedForwardNetwork < handle
       obj.weights = cell(1, obj.nbrOfLayers-1);
       obj.thresholds = cell(1, obj.nbrOfLayers-1);
     end
+        
+    function SetWeights(obj, weights, thresholds)
+      obj.weights = weights;
+      obj.thresholds = thresholds;
+    end
     
-    function RandomlyInitializeWeights(obj, weightInterval, thresholdInterval)
+    function RandomlyInitializeWeights(obj, weightInterval, thresholdInterval) %To be removed
       for iLayer = 1:obj.nbrOfLayers-1
         weightDimension = [obj.networkDimensions(iLayer+1), ...
           obj.networkDimensions(iLayer)];
@@ -37,15 +42,10 @@ classdef FeedForwardNetwork < handle
       end
     end
     
-    function SetWeights(obj, weights, thresholds)
-      obj.weights = weights;
-      obj.thresholds = thresholds;
-    end
-    
     function output = ForwardPropagate(obj, input)
       output = input;
       for iLayer = 1:obj.nbrOfLayers-1
-        s = obj.weights{iLayer}*output-obj.thresholds{iLayer};
+        s = obj.weights{iLayer}*output - obj.thresholds{iLayer};
         output = obj.activationFunction(s);
       end
     end

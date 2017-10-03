@@ -18,7 +18,7 @@ function fitness = EvaluateIndividual(network)
   
   %Simulation parameters
   deltaT = 0.01;
-  predictedNbrOfIterations = 2000;
+  predictedNbrOfIterations = 6000; %To make code slightly faster per MATLAB's recommendation
   
   %Dataset settings
   iSlope = 1;
@@ -30,13 +30,16 @@ function fitness = EvaluateIndividual(network)
   simulationRunning = true;
   iIteration = 0;
   recordedSpeed = zeros(predictedNbrOfIterations, 1); 
+  input = zeros(3,1);
   while simulationRunning
     iIteration = iIteration + 1;
     recordedSpeed(iIteration) = speed;
     
     slopeAngle = GetSlopeAngle(position, iSlope, iDataSet);
     
-    input = zeros(3,1);
+    truck.Iterate(slopeAngle, deltaT);
+    [position, speed, brakeTemperature] = truck.GetDynamics;
+    
     input(1) = speed/maxSpeed;
     input(2) = slopeAngle/maxSlopeAngle;
     input(3) = brakeTemperature/maxBrakeTemperature;
@@ -46,14 +49,11 @@ function fitness = EvaluateIndividual(network)
     brakePressure = output(2);
     
     if gearChangeRequest <= 1/3
-      truck.ShiftGear(gear-1);
+      truck.ShiftGear('down');
     elseif (gearChangeRequest > 2/3) && (gearChangeRequest <= 1)
-      truck.ShiftGear(gear-1);
+      truck.ShiftGear('up');
     end
     truck.ApplyBrakePressure(brakePressure);
-    
-    truck.Iterate(slopeAngle, deltaT);
-    [position, speed, brakeTemperature] = truck.GetDynamics;
     
     isWithinSpeedLimits = (speed <= maxSpeed) && (speed >= minSpeed);
     isBelowBrakeTempLimit = (brakeTemperature <= maxBrakeTemperature);
@@ -67,6 +67,7 @@ function fitness = EvaluateIndividual(network)
   else
     distanceTraveled = position;
   end
+  
   recordedSpeed(iIteration+1:end) = [];
   averageSpeed = mean(recordedSpeed);
   
@@ -74,6 +75,9 @@ function fitness = EvaluateIndividual(network)
   
   %fprintf('L = %.2f, v = %.2f, T = %.2f.\n', distanceTraveled, speed, brakeTemperature)
   %iIteration
+  %plot(1:iIteration, recordedSpeed)
+  %plot(1:iIteration, recordedGears) 
+  %plot(1:iIteration, output(:,1))
   
 end
 

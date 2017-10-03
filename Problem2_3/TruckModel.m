@@ -2,13 +2,15 @@ classdef TruckModel < handle
     
   properties
     
-    %Dynamics
+    %Dynamics (external)
     position;
     speed;
     brakeTemperature;
+    
+    %Dynamics (internal)
     gearRestTime;
     
-    %Controllables
+    %Input
     gear; 
     brakePressure;
     
@@ -47,7 +49,26 @@ classdef TruckModel < handle
       obj.brakePressure = brakePressure;
     end
     
-    function ShiftGear(obj, gear)
+    function ShiftGear(obj, direction)
+      maxGear = length(obj.gearBrakingFactors);
+      minGear = 1;
+      if obj.gearRestTime >= obj.gearRestPeriod
+        if strcmp(direction, 'up')
+          obj.gear = obj.gear + 1;
+        elseif strcmp(direction, 'down')
+          obj.gear = obj.gear - 1;
+        else
+          error('Must shift gear either up or down.')
+        end
+        if obj.gear > maxGear
+          obj.gear = maxGear;
+        elseif obj.gear < minGear
+          obj.gear = minGear;
+        end
+      end
+    end
+    
+    function ShiftGearTo(obj, gear) %Remove this, never used
       maxGear = length(obj.gearBrakingFactors);
       minGear = 1;
       if obj.gearRestTime >= obj.gearRestPeriod
@@ -68,8 +89,17 @@ classdef TruckModel < handle
       brakeTemperature = obj.brakeTemperature;
     end
     
+    function [gear, brakePressure] = GetInput(obj)
+      gear = obj.gear;
+      brakePressure = obj.brakePressure;
+    end
+    
     function Iterate(obj, slope, deltaT)
       obj.gearRestTime = obj.gearRestTime + deltaT;
+      
+      deltaTemperature = obj.brakeTemperature - obj.ambientBrakeTemperature;
+      temperatureDerivative = obj.GetTemperatureDerivative(deltaTemperature);
+      obj.brakeTemperature = obj.brakeTemperature + temperatureDerivative*deltaT;
       
       gravityForce = obj.GetGravityForce(slope);
       brakingForce = obj.GetBrakingForce;
@@ -77,10 +107,6 @@ classdef TruckModel < handle
       acceleration = obj.GetAcceleration(gravityForce, ...
         brakingForce, engineBrakingForce);
       
-      deltaTemperature = obj.brakeTemperature - obj.ambientBrakeTemperature;
-      temperatureDerivative = obj.GetTemperatureDerivative(deltaTemperature);
-      
-      obj.brakeTemperature = obj.brakeTemperature + temperatureDerivative*deltaT;
       obj.speed = obj.speed + acceleration*deltaT;
       obj.position = obj.position + cosd(slope)*obj.speed*deltaT;
     end
@@ -95,11 +121,11 @@ classdef TruckModel < handle
     
     function brakingForce = GetBrakingForce(obj)
       g = obj.GetGravityConstant;
-      if obj.brakeTemperature <= obj.maxBrakeTemperature - 100
+      if obj.brakeTemperature < obj.maxBrakeTemperature - 100
         brakingForce = obj.mass*g/20*obj.brakePressure;
       else
         tmp = exp(-(obj.brakeTemperature-(obj.maxBrakeTemperature-100))/100); %Too complicated?
-        brakingForce = obj.mass*g/20*obj.brakePressure*tmp;
+        brakingForce = obj.mass*g/20*obj.brakePressure * tmp;
       end
     end
         
@@ -128,7 +154,7 @@ classdef TruckModel < handle
   
   methods(Static)
     function g = GetGravityConstant
-      g = 9.80665;
+      g = 9.82;
     end
   end
   

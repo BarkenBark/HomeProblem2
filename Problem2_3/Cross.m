@@ -1,8 +1,7 @@
 function newChromosomePair = Cross(chromosome1, chromosome2)
 
   nbrOfGenes = length(chromosome1);
-  
-  crossoverPoint = 1 + fix(rand*(nbrOfGenes-1));
+  crossoverPoint = randi(nbrOfGenes);
   
   newChromosomePair = zeros(2,nbrOfGenes);
   for j = 1:nbrOfGenes

@@ -1,23 +1,9 @@
 %% Main code
 
-%Dataset
-iSlope = 1;
-iDataset = 1;
-
-%Initial values
-brakeTemperature = 500;
-speed = 20;
-xPosition = 0;
-%slopeAngle = GetSlopeAngle(xPosition, iSlope, iDataset);
-
-%Controllables
-brakePressure = 0.2;
-gear = 7;
-
 %Controller properties
-nbrOfHiddenNeurons = 8;
+nbrOfHiddenNeurons = 5;
 networkDimensions = [3, nbrOfHiddenNeurons, 2];
-weightInterval = [-5, 5];
+weightInterval = [-2, 2];
 thresholdInterval = weightInterval;
 
 
@@ -31,10 +17,10 @@ populationSize = 100; %POPULATION_SIZE?
 nbrOfGenes = nbrOfWeights + nbrOfThresholds;
 mutationProbability = 1/nbrOfGenes;
 creepRate = 0.20;
-creepProbability = 0.7;
+creepProbability = 0.5;
 tournamentSelectionParameter = 0.8;
 tournamentSize = 2;
-crossoverProbability = 0.8;
+crossoverProbability = 0.7;
 
 fitness = zeros(populationSize, 1);
 population = InitializePopulation(populationSize, networkDimensions);
@@ -89,6 +75,8 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
 
   tempPopulation = InsertBestIndividual(tempPopulation, bestIndividual, COPIES_OF_BEST_INDIVIDUAL);
   population = tempPopulation;
+  
+  disp('Generation Complete')
 
   if mod(iGeneration, NUMBER_OF_GENERATIONS/10)==0
     t = toc(t);
