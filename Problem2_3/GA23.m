@@ -13,10 +13,10 @@ thresholdInterval = weightInterval;
 
 %% Genetic Algorithm
 
-NUMBER_OF_GENERATIONS = 10;
+NUMBER_OF_GENERATIONS = 10000;
 COPIES_OF_BEST_INDIVIDUAL = 1;
 
-populationSize = 100; %POPULATION_SIZE?
+populationSize = 200; %POPULATION_SIZE?
 [nbrOfWeights, nbrOfThresholds] = GetNbrOfWeights(networkDimensions);
 nbrOfGenes = nbrOfWeights + nbrOfThresholds;
 mutationProbability = 1/nbrOfGenes;
@@ -80,7 +80,7 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
   tempPopulation = InsertBestIndividual(tempPopulation, bestIndividual, COPIES_OF_BEST_INDIVIDUAL);
   population = tempPopulation;
  
-  if mod(iGeneration, NUMBER_OF_GENERATIONS/10)==0
+  if mod(iGeneration, NUMBER_OF_GENERATIONS/100)==0
     t = toc(t);
     fprintf('Generation %d/%d complete after %.2f seconds.\n', ...
       iGeneration, NUMBER_OF_GENERATIONS, t)
