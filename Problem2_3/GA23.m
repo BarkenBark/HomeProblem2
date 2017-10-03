@@ -1,7 +1,11 @@
 %% Main code
 
+%
+iSlope = 1;
+iDataSet = 1;
+
 %Controller properties
-nbrOfHiddenNeurons = 5;
+nbrOfHiddenNeurons = 7;
 networkDimensions = [3, nbrOfHiddenNeurons, 2];
 weightInterval = [-2, 2];
 thresholdInterval = weightInterval;
@@ -9,7 +13,7 @@ thresholdInterval = weightInterval;
 
 %% Genetic Algorithm
 
-NUMBER_OF_GENERATIONS = 100;
+NUMBER_OF_GENERATIONS = 10;
 COPIES_OF_BEST_INDIVIDUAL = 1;
 
 populationSize = 100; %POPULATION_SIZE?
@@ -38,7 +42,7 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
     chromosome = population(i,:);
     network = DecodeChromosome(chromosome, networkDimensions, ...
       weightInterval, thresholdInterval);
-    fitness(i) = EvaluateIndividual(network);
+    fitness(i) = EvaluateIndividual(network, iSlope, iDataSet);
     if (fitness(i) > maximumFitness)
       maximumFitness = fitness(i);
       bestIndividualIndex = i;
@@ -75,9 +79,7 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
 
   tempPopulation = InsertBestIndividual(tempPopulation, bestIndividual, COPIES_OF_BEST_INDIVIDUAL);
   population = tempPopulation;
-  
-  disp('Generation Complete')
-
+ 
   if mod(iGeneration, NUMBER_OF_GENERATIONS/10)==0
     t = toc(t);
     fprintf('Generation %d/%d complete after %.2f seconds.\n', ...

@@ -1,4 +1,4 @@
-function [fitness, recordedState] = EvaluateIndividual(network, iSlope, iDataSet)
+function [fitness, recordedState] = SimulateTruck(network)
 %EvaluateIndividual Run the simulation where the truck is controlled by a
 %network encoded by chromosome. The fitness score returned is the
 %horisontal distance traveled.
@@ -13,18 +13,19 @@ function [fitness, recordedState] = EvaluateIndividual(network, iSlope, iDataSet
   %Limits
   maxSpeed = 25;
   minSpeed = 1;
-  maxSlopeAngle = 10;
-  slopeLength = 1000;
-  %Note: Get maxBrakeTemperature from truck properties
+  maxSlopeAngle = 10; %Not imposing constraint
+  maxBrakeTemperature = 750;
   
   %Simulation parameters
   deltaT = 0.01;
   predictedNbrOfIterations = 6000; %To make code slightly faster per MATLAB's recommendation
-
   
-  %% Commence evaluation
+  %Dataset settings
+  iSlope = 1;
+  iDataSet = 1;
+  slopeLength = 1000;
+
   truck = TruckModel(position, speed, brakeTemperature, gear, brakePressure);
-  maxBrakeTemperature = truck.maxBrakeTemperature;
   
   recordedPosition = zeros(predictedNbrOfIterations, 1); 
   recordedSlopeAngle = zeros(predictedNbrOfIterations, 1); 
@@ -80,7 +81,6 @@ function [fitness, recordedState] = EvaluateIndividual(network, iSlope, iDataSet
     distanceTraveled = position;
   end
   
-  recordedPosition(iIteration+1:end) = [];
   recordedSlopeAngle(iIteration+1:end) = [];
   recordedBrakePressure(iIteration+1:end) = [];
   recordedGear(iIteration+1:end) = [];
@@ -93,4 +93,3 @@ function [fitness, recordedState] = EvaluateIndividual(network, iSlope, iDataSet
   fitness = averageSpeed*distanceTraveled;
   
 end
-

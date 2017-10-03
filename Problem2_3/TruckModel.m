@@ -57,8 +57,6 @@ classdef TruckModel < handle
           obj.gear = obj.gear + 1;
         elseif strcmp(direction, 'down')
           obj.gear = obj.gear - 1;
-        else
-          error('Must shift gear either up or down.')
         end
         if obj.gear > maxGear
           obj.gear = maxGear;
@@ -68,19 +66,21 @@ classdef TruckModel < handle
       end
     end
     
-    function ShiftGearTo(obj, gear) %Remove this, never used
-      maxGear = length(obj.gearBrakingFactors);
-      minGear = 1;
-      if obj.gearRestTime >= obj.gearRestPeriod
-        if gear > maxGear
-          obj.gear = maxGear;
-        elseif gear < minGear
-          obj.gear = minGear;
-        else
-          obj.gear = gear;
-        end
-        obj.gearRestTime = 0;
-      end
+    function Iterate(obj, slope, deltaT)
+      obj.gearRestTime = obj.gearRestTime + deltaT;
+      
+      deltaTemperature = obj.brakeTemperature - obj.ambientBrakeTemperature;
+      temperatureDerivative = obj.CalculateTemperatureDerivative(deltaTemperature);
+      obj.brakeTemperature = obj.brakeTemperature + temperatureDerivative*deltaT;
+      
+      gravityForce = obj.CalculateGravityForce(slope);
+      brakingForce = obj.CalculateBrakingForce;
+      engineBrakingForce = obj.CalculateEngineBrakingForce;
+      acceleration = obj.CalculateAcceleration(gravityForce, ...
+        brakingForce, engineBrakingForce);
+      
+      obj.speed = obj.speed + acceleration*deltaT;
+      obj.position = obj.position + cosd(slope)*obj.speed*deltaT;
     end
     
     function [position, speed, brakeTemperature] = GetDynamics(obj)
@@ -89,37 +89,19 @@ classdef TruckModel < handle
       brakeTemperature = obj.brakeTemperature;
     end
     
-    function [gear, brakePressure] = GetInput(obj)
+    function [gear, brakePressure] = GetInputs(obj)
       gear = obj.gear;
       brakePressure = obj.brakePressure;
     end
     
-    function Iterate(obj, slope, deltaT)
-      obj.gearRestTime = obj.gearRestTime + deltaT;
-      
-      deltaTemperature = obj.brakeTemperature - obj.ambientBrakeTemperature;
-      temperatureDerivative = obj.GetTemperatureDerivative(deltaTemperature);
-      obj.brakeTemperature = obj.brakeTemperature + temperatureDerivative*deltaT;
-      
-      gravityForce = obj.GetGravityForce(slope);
-      brakingForce = obj.GetBrakingForce;
-      engineBrakingForce = obj.GetEngineBrakingForce;
-      acceleration = obj.GetAcceleration(gravityForce, ...
-        brakingForce, engineBrakingForce);
-      
-      obj.speed = obj.speed + acceleration*deltaT;
-      obj.position = obj.position + cosd(slope)*obj.speed*deltaT;
-    end
-    
-    
     
     %Physics functions
-    function gravityForce = GetGravityForce(obj, slope)
+    function gravityForce = CalculateGravityForce(obj, slope)
       g = obj.GetGravityConstant;
       gravityForce = obj.mass*g*sind(slope);
     end
     
-    function brakingForce = GetBrakingForce(obj)
+    function brakingForce = CalculateBrakingForce(obj)
       g = obj.GetGravityConstant;
       if obj.brakeTemperature < obj.maxBrakeTemperature - 100
         brakingForce = obj.mass*g/20*obj.brakePressure;
@@ -129,16 +111,16 @@ classdef TruckModel < handle
       end
     end
         
-    function engineBrakingForce = GetEngineBrakingForce(obj)
+    function engineBrakingForce = CalculateEngineBrakingForce(obj)
       engineBrakingForce = obj.gearBrakingFactors(obj.gear) * obj.engineBrakingConstant;
     end
     
-    function acceleration = GetAcceleration(obj, gravityForce, ...
+    function acceleration = CalculateAcceleration(obj, gravityForce, ...
         brakingForce, engineBrakingForce)
       acceleration = (gravityForce - brakingForce - engineBrakingForce)/obj.mass;
     end
     
-    function temperatureDerivative = GetTemperatureDerivative(obj, deltaTemperature)
+    function temperatureDerivative = CalculateTemperatureDerivative(obj, deltaTemperature)
       if obj.brakePressure < 0.01
         temperatureDerivative =  -deltaTemperature/obj.tau;
       else

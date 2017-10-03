@@ -1,3 +1,0 @@
-function states = SimulateTruck()
-  
-end

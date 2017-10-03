@@ -1,0 +1,14 @@
+    function ShiftGearTo(obj, gear) %Remove this, never used
+      maxGear = length(obj.gearBrakingFactors);
+      minGear = 1;
+      if obj.gearRestTime >= obj.gearRestPeriod
+        if gear > maxGear
+          obj.gear = maxGear;
+        elseif gear < minGear
+          obj.gear = minGear;
+        else
+          obj.gear = gear;
+        end
+        obj.gearRestTime = 0;
+      end
+    end
