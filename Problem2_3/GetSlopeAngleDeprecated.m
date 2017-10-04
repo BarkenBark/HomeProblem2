@@ -5,23 +5,23 @@ if (iDataSet == 1)
  if (iSlope == 1) 
    alpha = 4 + sin(x/100) + cos(sqrt(2)*x/50);
  elseif (iSlope == 2)
-   alpha = 3 + 2*sin(x/100) - cos(sqrt(16)*x/50);
+   alpha = 2 + exp(-x/10) + sin(x/70);
  elseif (iSlope == 3)
-   alpha = x/500 - sin(x/100) + cos(x/200) + 5;
+   alpha = 2.3 * cos(log(x+1)) + 2.3 + x/500;
  elseif (iSlope == 4)
-   alpha = 8 + sin(sqrt(3)*x/80) - cos(x/50) - x/200;
+   alpha = 5 * cos(x/100) + 5;
  elseif (iSlope == 5)
    alpha = cos(x/100) + sin(x/50) + 2;
  elseif (iSlope == 6)
-   alpha = 5 + 3*sin(x/20) + 2*cos(sqrt(9)*x/400);
+   alpha = log(cos(x/50)+2) + sin(x/100) + 1;
  elseif (iSlope == 7)
-   alpha = 1 + 0.5*sin(x/90) - 0.3*cos(sqrt(2)*x/150);
+   alpha = 9.9*sqrt(exp(-x/100));
  elseif(iSlope == 8)
-   alpha = 7 - 3*cos(x/30);
+   alpha = 8 * (x/1000)^2;
  elseif(iSlope == 9)
-   alpha = 2 + sin(x/100) + cos(sqrt(2)*x/50);
+   alpha = 3*exp(-x/100) + 2*sin(x/20) + x/1000*cos((x/90)^2) + 4;
  elseif (iSlope== 10)
-   alpha = 4 + 2*sin(x/300) - 2*cos(sqrt(2)*x/200)^2;
+   alpha = 3 + 2*sin(x/50) + cos(sqrt(2)*x/100);
  end 
  
 %Validation set
@@ -29,13 +29,13 @@ elseif (iDataSet == 2)
  if (iSlope == 1) 
    alpha = 6 - sin(x/100) + cos(sqrt(3)*x/50);
  elseif (iSlope == 2)
-   alpha = 4 + 0.5*sin(x/100) - cos(sqrt(6)*x/30);
+   alpha = 300/(x+200)*(sin(cos(x/12)) + cos(sin(x/15)) + 3);
  elseif (iSlope == 3)
-   alpha = 2*sin(x/250) + 5;
+   alpha = 4*sin(x/200) + 5;
  elseif (iSlope == 4)
-   alpha = 4 + sin(x/100) + cos(sqrt(2)*x/50);
+   alpha = 3*cos(2*sin(1*cos(x/45+1)-1)+1);
  elseif (iSlope == 5) 
-   alpha = 5 + sin(x/50) + cos(sqrt(5)*x/50) - x/500;
+   alpha = 5 + sin(x/50) + cos(sqrt(5)*x/50);
  end 
  
 %Test set
