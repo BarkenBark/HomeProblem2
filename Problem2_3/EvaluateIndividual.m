@@ -11,13 +11,6 @@ function [fitness, recordedState] = EvaluateIndividual(network, iDataSet, iSlope
     slopes = iSlope;
   end
 
-  %Initial truck state
-  position = 0;
-  speed = 20;
-  brakeTemperature = 500; 
-  gear = 7;
-  brakePressure = 0;
-  
   %Limits
   maxSpeed = 25;
   minSpeed = 1;
@@ -26,14 +19,19 @@ function [fitness, recordedState] = EvaluateIndividual(network, iDataSet, iSlope
   %Note: Get maxBrakeTemperature from truck properties
 
   %Simulation parameters
-  deltaT = 0.01;
+  deltaT = 0.1;
   predictedNbrOfIterations = 6000; %To make code slightly faster per MATLAB's recommendation
-
-  
   
   %Commence evaluation
   slopeFitness = [];
   for iSlope = slopes
+    
+    %Initial truck state
+    position = 0;
+    speed = 20;
+    brakeTemperature = 500;
+    gear = 7;
+    brakePressure = 0;
     
     truck = TruckModel(position, speed, brakeTemperature, gear, brakePressure);
     maxBrakeTemperature = truck.maxBrakeTemperature;

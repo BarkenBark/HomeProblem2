@@ -1,15 +1,15 @@
 %% TestProgram
 
-result = load('BestNetwork.mat');
+result = load('BestNetworkFinal.mat');
 bestNetwork = result.BestNetwork;
 
-iDataSet = 1;
-iSlope = 5;
+iDataSet = 3;
+iSlope = 1;
 
 [fitness, state] = EvaluateIndividual(bestNetwork, iDataSet, iSlope);
+
 %state contains position, slope angle, brake pedal pressure, gear, 
 %speed and brake temperature in that order 
-
 for iPlot = 1:5
   subplot(5, 1, iPlot);
   plot(state(:,1), state(:,iPlot+1))

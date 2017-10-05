@@ -54,14 +54,15 @@ classdef TruckModel < handle
       minGear = 1;
       if obj.gearRestTime >= obj.gearRestPeriod
         if strcmp(direction, 'up')
-          obj.gear = obj.gear + 1;
+          if obj.gear < maxGear
+            obj.gear = obj.gear + 1;
+            obj.gearRestTime = 0;
+          end
         elseif strcmp(direction, 'down')
-          obj.gear = obj.gear - 1;
-        end
-        if obj.gear > maxGear
-          obj.gear = maxGear;
-        elseif obj.gear < minGear
-          obj.gear = minGear;
+          if obj.gear > minGear
+            obj.gear = obj.gear - 1;
+            obj.gearRestTime = 0;
+          end
         end
       end
     end

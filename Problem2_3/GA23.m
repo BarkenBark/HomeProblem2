@@ -5,24 +5,24 @@ iValidationSet = 2;
 iTestSet = 3;
 
 %Controller properties
-nbrOfHiddenNeurons = 7;
+nbrOfHiddenNeurons = 8;
 networkDimensions = [3, nbrOfHiddenNeurons, 2];
-weightInterval = [-2, 2];
+weightInterval = [-3, 3];
 thresholdInterval = weightInterval;
 
 
 %% Genetic Algorithm
 
-NUMBER_OF_GENERATIONS = 500;
+NUMBER_OF_GENERATIONS = 200;
 COPIES_OF_BEST_INDIVIDUAL = 1;
-HOLDOUT_THRESHOLD = -realmax; %HOLDOUT_THRESHOLD iterations without improvement => termination
+HOLDOUT_THRESHOLD = realmax; %HOLDOUT_THRESHOLD iterations without improvement => termination
 
 populationSize = 100; %POPULATION_SIZE?
 [nbrOfWeights, nbrOfThresholds] = GetNbrOfWeights(networkDimensions);
 nbrOfGenes = nbrOfWeights + nbrOfThresholds;
 mutationProbability = 1/nbrOfGenes;
-creepRate = 0.10;
-creepProbability = 0.9;
+creepRate = 0.15;
+creepProbability = 0.85;
 tournamentSelectionParameter = 0.8;
 tournamentSize = 2;
 crossoverProbability = 0.3;
@@ -36,6 +36,7 @@ maximumValidationFitnessSoFar = 0;
 bestValidationIndividual = zeros(1, nbrOfGenes);
 
 t = tic;
+holdoutStrikes = 0;
 for iGeneration = 1:NUMBER_OF_GENERATIONS
   
   %Evaluate individuals
@@ -71,13 +72,19 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
     deltaValidationFitness = maximumValidationFitness(iGeneration);
   end
   
-%   if deltaValidationFitness < 0
-%     holdoutStrikes = holdoutStrikes + 1;
-%     if holdOutStrikes == HOLDOUT_THRESHOLD
-%       fprintf('hurr')
-%       break
-%     end
-%   end
+  if maximumValidationFitness(iGeneration) <= maximumValidationFitnessSoFar
+    holdoutStrikes = holdoutStrikes + 1;
+    if holdoutStrikes == HOLDOUT_THRESHOLD
+      fprintf(strcat('Optimization terminated due to no increase in',  ...
+        ' maximum validation fitness in %d generations.\n'), iGeneration)
+      maximumTrainingFitness(iGeneration+1:end) = [];
+      maximumValidationFitness(iGeneration+1:end) = [];
+      break
+    end
+  else
+    holdoutStrikes = 0;
+  end
+    
   
   if maximumValidationFitness(iGeneration) > maximumValidationFitnessSoFar
     maximumValidationFitnessSoFar = maximumValidationFitness(iGeneration);
@@ -115,7 +122,7 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
     COPIES_OF_BEST_INDIVIDUAL);
   population = tempPopulation;
  
-  if mod(iGeneration, NUMBER_OF_GENERATIONS/10)==0
+  if mod(iGeneration, NUMBER_OF_GENERATIONS/50)==0
     t = toc(t);
     fprintf('Generation %d/%d complete after %.2f seconds.\n', ...
       iGeneration, NUMBER_OF_GENERATIONS, t)
