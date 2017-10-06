@@ -14,6 +14,24 @@ X2 = linspace(-5,5,resolution);
 
 F = loggedFunction(X1, X2);
 contour(X1, X2, F)
-title('Contout plot of f(x,y)', 'FontSize', 18)
-xlabel('x', 'FontSize', 18)
-ylabel('y', 'FontSize', 18)
+set(gca, 'FontSize', 12)
+title('Contour plot of $f(x,y)$', 'FontSize', 18, 'Interpreter', 'Latex')
+xlabel('$x$', 'FontSize', 18, 'Interpreter', 'Latex')
+ylabel('$y$', 'FontSize', 18, 'Interpreter', 'Latex')
+
+minima(1,:) = [3.000022, 2.000015];
+minima(2,:) = [3.584428, -1.848127];
+minima(3,:) = [-3.779308, -3.283193];
+minima(4,:) = [-2.805118, 3.131313];
+
+hold on
+scatter(minima(:,1), minima(:,2), 180, 'x', 'LineWidth', 3, 'MarkerEdgeColor', 'black')
+text(minima(1,1) - 1, minima(1,2) + 0.5, '(3.00,2.00)', 'FontSize', 18, 'Interpreter', 'Latex') 
+text(minima(2,1)-1, minima(2,2)+0.5, '(3.58, -1.85)', 'FontSize', 18, 'Interpreter', 'Latex') 
+text(minima(3,1)-1, minima(3,2)+0.5, '(-3.78, -3.28)', 'FontSize', 18, 'Interpreter', 'Latex') 
+text(minima(4,1)-1, minima(4,2)+0.5, '(-2.81, 3.13)', 'FontSize', 18, 'Interpreter', 'Latex') 
+
+% text(minima(1,1) - 1, minima(1,2) + 0.5, '(3.00,2.00)', 'FontSize', 18, 'Interpreter', 'Latex') 
+% text(minima(2,1), minima(2,2), '$\quad \leftarrow$ b', 'FontSize', 18, 'Interpreter', 'Latex') 
+% text(minima(3,1), minima(3,2), '$\quad \leftarrow$ c', 'FontSize', 18, 'Interpreter', 'Latex') 
+% text(minima(4,1), minima(4,2), '$\quad \leftarrow$ d', 'FontSize', 18, 'Interpreter', 'Latex') 
