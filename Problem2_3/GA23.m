@@ -16,11 +16,11 @@ thresholdInterval = weightInterval;
 
 %% Genetic Algorithm
 
-NUMBER_OF_GENERATIONS = 50;
+NUMBER_OF_GENERATIONS = 5000;
 COPIES_OF_BEST_INDIVIDUAL = 1;
-HOLDOUT_THRESHOLD = realmax; %HOLDOUT_THRESHOLD iterations without improvement => termination
+HOLDOUT_THRESHOLD = 100; %HOLDOUT_THRESHOLD iterations without improvement => termination
 
-populationSize = 50; %POPULATION_SIZE?
+populationSize = 200; %POPULATION_SIZE?
 [nbrOfWeights, nbrOfThresholds] = GetNbrOfWeights(networkDimensions);
 nbrOfGenes = nbrOfWeights + nbrOfThresholds;
 geneOrder = randperm(nbrOfGenes);
@@ -127,7 +127,7 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
     COPIES_OF_BEST_INDIVIDUAL);
   population = tempPopulation;
  
-  if mod(iGeneration, NUMBER_OF_GENERATIONS/20)==0
+  if mod(iGeneration, NUMBER_OF_GENERATIONS/500)==0
     t = toc(t);
     fprintf('Generation %d/%d complete after %.2f seconds.\n', ...
       iGeneration, NUMBER_OF_GENERATIONS, t)
