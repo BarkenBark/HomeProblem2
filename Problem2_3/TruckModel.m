@@ -39,7 +39,7 @@ classdef TruckModel < handle
       obj.brakeTemperature = brakeTemperature;
       obj.gear = gear;
       obj.brakePressure = brakePressure;
-      obj.gearRestTime = 0;
+      obj.gearRestTime = 2;
     end
     
     
@@ -49,6 +49,7 @@ classdef TruckModel < handle
       obj.brakePressure = brakePressure;
     end
     
+
     function ShiftGear(obj, direction)
       maxGear = length(obj.gearBrakingFactors);
       minGear = 1;
@@ -69,10 +70,7 @@ classdef TruckModel < handle
     
     function Iterate(obj, slope, deltaT)
       obj.gearRestTime = obj.gearRestTime + deltaT;
-      
-      deltaTemperature = obj.brakeTemperature - obj.ambientBrakeTemperature;
-      temperatureDerivative = obj.CalculateTemperatureDerivative(deltaTemperature);
-      obj.brakeTemperature = obj.brakeTemperature + temperatureDerivative*deltaT;
+      obj.position = obj.position + cosd(slope)*obj.speed*deltaT;
       
       gravityForce = obj.CalculateGravityForce(slope);
       brakingForce = obj.CalculateBrakingForce;
@@ -81,7 +79,10 @@ classdef TruckModel < handle
         brakingForce, engineBrakingForce);
       
       obj.speed = obj.speed + acceleration*deltaT;
-      obj.position = obj.position + cosd(slope)*obj.speed*deltaT;
+      
+      deltaTemperature = obj.brakeTemperature - obj.ambientBrakeTemperature;
+      temperatureDerivative = obj.CalculateTemperatureDerivative(deltaTemperature);
+      obj.brakeTemperature = obj.brakeTemperature + temperatureDerivative*deltaT;
     end
     
     function [position, speed, brakeTemperature] = GetDynamics(obj)
@@ -137,7 +138,7 @@ classdef TruckModel < handle
   
   methods(Static)
     function g = GetGravityConstant
-      g = 9.82;
+      g = 9.81;
     end
   end
   

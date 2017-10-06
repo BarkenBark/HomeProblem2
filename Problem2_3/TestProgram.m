@@ -1,12 +1,12 @@
 %% TestProgram
 
-result = load('durr.mat');
+result = load('grigNet.mat');
 bestNetwork = result.BestNetwork;
 
-iDataSet = 2;
-iSlope = 4;
+iDataSet = 3;
+iSlope = 1;
 
-[fitness, state] = EvaluateIndividual(bestNetwork, iDataSet, iSlope);
+[fitness, state, debugVector] = EvaluateIndividual(bestNetwork, iDataSet, iSlope);
 
 %state contains position, slope angle, brake pedal pressure, gear, 
 %speed and brake temperature in that order 

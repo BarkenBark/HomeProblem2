@@ -46,10 +46,11 @@ function [fitness, recordedState] = EvaluateIndividual(network, iDataSet, iSlope
     simulationRunning = true;
     iIteration = 0;
     input = zeros(3,1);
+    distanceTraveled = 0;
     while simulationRunning
       iIteration = iIteration + 1;
       
-      slopeAngle = GetSlopeAngle(position, iSlope, iDataSet);
+      slopeAngle = GetSlopeAngleAndreas(position, iSlope, iDataSet);
       if slopeAngle < 0
         error('The slope angle should never be less than zero.')
       end
@@ -71,12 +72,13 @@ function [fitness, recordedState] = EvaluateIndividual(network, iDataSet, iSlope
       
       if gearChangeRequest <= 1/3
         truck.ShiftGear('down');
-      elseif (gearChangeRequest > 2/3) && (gearChangeRequest <= 1)
+      elseif gearChangeRequest > 2/3
         truck.ShiftGear('up');
       end
       truck.ApplyBrakePressure(brakePressure);
       [gear, brakePressure] = truck.GetInputs;
       
+      distanceTraveled = distanceTraveled + speed*deltaT;
       truck.Iterate(slopeAngle, deltaT);
       [position, speed, brakeTemperature] = truck.GetDynamics;
       
@@ -87,11 +89,11 @@ function [fitness, recordedState] = EvaluateIndividual(network, iDataSet, iSlope
       simulationRunning = isSatisfyingConstraints && isWithinSlope;
     end
     
-    if position > slopeLength
-      distanceTraveled = slopeLength;
-    else
-      distanceTraveled = position;
-    end
+%     if position > slopeLength
+%       distanceTraveled = slopeLength;
+%     else
+%       distanceTraveled = position;
+%     end
     
     recordedPosition(iIteration+1:end) = [];
     recordedSlopeAngle(iIteration+1:end) = [];
