@@ -13,11 +13,11 @@ if (iDataSet == 1)
  elseif (iSlope == 5)
    alpha = cos(x/100) + sin(x/50) + 2;
  elseif (iSlope == 6)
-   alpha = 5 + 3*sin(x/20) + 2*cos(sqrt(9)*x/400);
+   alpha = 5 + 1.5*sin(x/20) + 0.5*cos(sqrt(9)*x/400);
  elseif (iSlope == 7)
-   alpha = 1 + 0.5*sin(x/90) - 0.3*cos(sqrt(2)*x/150);
+   alpha = 2 + 0.5*sin(x/90) - 1.5*cos(sqrt(2)*x/150);
  elseif(iSlope == 8)
-   alpha = 7 - 3*cos(x/30);
+   alpha = 7 - 2*cos(x/30);
  elseif(iSlope == 9)
    alpha = 2 + sin(x/100) + cos(sqrt(2)*x/50);
  elseif (iSlope== 10)
@@ -33,7 +33,7 @@ elseif (iDataSet == 2)
  elseif (iSlope == 3)
    alpha = 2*sin(x/250) + 5;
  elseif (iSlope == 4)
-   alpha = 3 + sin(x/100) + cos(sqrt(2)*x/50);
+   alpha = 3 + 1.5*sin(x/100) + cos(sqrt(2)*x/50);
  elseif (iSlope == 5) 
    alpha = 5 + sin(x/50) + cos(sqrt(5)*x/50) - x/500;
  end 
