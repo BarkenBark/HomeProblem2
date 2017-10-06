@@ -10,13 +10,13 @@ iTestSet = 3;
 %Controller properties
 nbrOfHiddenNeurons = 8;
 networkDimensions = [3, nbrOfHiddenNeurons, 2];
-weightInterval = [-6, 6];
+weightInterval = [-7, 7];
 thresholdInterval = weightInterval;
 
 
 %% Genetic Algorithm
 
-NUMBER_OF_GENERATIONS = 5000;
+NUMBER_OF_GENERATIONS = 1000;
 COPIES_OF_BEST_INDIVIDUAL = 1;
 HOLDOUT_THRESHOLD = 100; %HOLDOUT_THRESHOLD iterations without improvement => termination
 

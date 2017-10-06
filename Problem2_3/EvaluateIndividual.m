@@ -46,7 +46,6 @@ function [fitness, recordedState] = EvaluateIndividual(network, iDataSet, iSlope
     simulationRunning = true;
     iIteration = 0;
     input = zeros(3,1);
-    distanceTraveled = 0;
     while simulationRunning
       iIteration = iIteration + 1;
       
@@ -76,10 +75,9 @@ function [fitness, recordedState] = EvaluateIndividual(network, iDataSet, iSlope
         truck.ShiftGear('up');
       end
       truck.ApplyBrakePressure(brakePressure);
-      [gear, brakePressure] = truck.GetInputs;
-      
-      distanceTraveled = distanceTraveled + speed*deltaT;
-      truck.Iterate(slopeAngle, deltaT);
+      [gear, brakePressure] = truck.GetControllables;
+
+      truck.UpdateDynamics(slopeAngle, deltaT);
       [position, speed, brakeTemperature] = truck.GetDynamics;
       
       isWithinSpeedLimits = (speed <= maxSpeed) && (speed >= minSpeed);
@@ -89,11 +87,11 @@ function [fitness, recordedState] = EvaluateIndividual(network, iDataSet, iSlope
       simulationRunning = isSatisfyingConstraints && isWithinSlope;
     end
     
-%     if position > slopeLength
-%       distanceTraveled = slopeLength;
-%     else
-%       distanceTraveled = position;
-%     end
+    if position > slopeLength
+      distanceTraveled = slopeLength;
+    else
+      distanceTraveled = position;
+    end
     
     recordedPosition(iIteration+1:end) = [];
     recordedSlopeAngle(iIteration+1:end) = [];

@@ -1,7 +1,6 @@
 classdef TruckModel < handle
     
   properties
-    
     %Dynamics (external)
     position;
     speed;
@@ -10,7 +9,7 @@ classdef TruckModel < handle
     %Dynamics (internal)
     gearRestTime;
     
-    %Input
+    %Controllables
     gear; 
     brakePressure;
     
@@ -23,15 +22,11 @@ classdef TruckModel < handle
     gearRestPeriod = 2;
     tau = 30;
     Ch = 40;
- 
   end
   
   
   
-  
-  
   methods
-    
     %Constructor
     function obj = TruckModel(position, speed, brakeTemperature, gear, brakePressure)
       obj.position = position;
@@ -39,16 +34,14 @@ classdef TruckModel < handle
       obj.brakeTemperature = brakeTemperature;
       obj.gear = gear;
       obj.brakePressure = brakePressure;
-      obj.gearRestTime = 2;
+      obj.gearRestTime = realmax; %Truck has not shifted gear before initial state
     end
     
     
-    
-    %Truck state functions
+    %Mutators
     function ApplyBrakePressure(obj, brakePressure)
       obj.brakePressure = brakePressure;
     end
-    
 
     function ShiftGear(obj, direction)
       maxGear = length(obj.gearBrakingFactors);
@@ -68,7 +61,7 @@ classdef TruckModel < handle
       end
     end
     
-    function Iterate(obj, slope, deltaT)
+    function UpdateDynamics(obj, slope, deltaT)
       obj.gearRestTime = obj.gearRestTime + deltaT;
       obj.position = obj.position + cosd(slope)*obj.speed*deltaT;
       
@@ -85,13 +78,15 @@ classdef TruckModel < handle
       obj.brakeTemperature = obj.brakeTemperature + temperatureDerivative*deltaT;
     end
     
+    
+    %Accessors
     function [position, speed, brakeTemperature] = GetDynamics(obj)
       speed = obj.speed;
       position = obj.position;
       brakeTemperature = obj.brakeTemperature;
     end
     
-    function [gear, brakePressure] = GetInputs(obj)
+    function [gear, brakePressure] = GetControllables(obj)
       gear = obj.gear;
       brakePressure = obj.brakePressure;
     end
@@ -129,7 +124,6 @@ classdef TruckModel < handle
         temperatureDerivative = obj.Ch * obj.brakePressure;
       end
     end
-    
   end %end methods
   
   
