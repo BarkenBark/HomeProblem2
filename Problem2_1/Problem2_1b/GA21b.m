@@ -7,10 +7,10 @@ tspFigure = InitializeTspPlot(cityLocations, [0 20 0 20]);
 connection = InitializeConnections(cityLocations); 
 
 NUMBER_OF_GENERATIONS = 10000;
-NUMBER_OF_GENES = nbrOfCities;
 COPIES_OF_BEST_INDIVIDUAL = 1;
 
 populationSize = 200;
+nbrOfGenes = nbrOfCities;
 mutationProbability = 0.04;
 tournamentSelectionParameter = 0.8;
 tournamentSize = 2;
@@ -18,7 +18,7 @@ tournamentSize = 2;
 %% Start genetic algorithm
 
 fitness = zeros(populationSize,1);
-population = InitializePopulation(populationSize, NUMBER_OF_GENES);
+population = InitializePopulation(populationSize, nbrOfGenes);
 
 t = tic;
 prevMaximumFitness = 0;

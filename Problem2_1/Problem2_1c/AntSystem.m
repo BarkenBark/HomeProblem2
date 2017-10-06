@@ -22,7 +22,7 @@ beta = 4.0;
 rho = 0.5;          
 
 % Done: Write the GetNearestNeighbourPathLength function
-nearestNeighbourPathLength = GetNearestNeighbourPathLength(cityLocation); % Done: Write the GetNearestNeighbourPathLength function
+nearestNeighbourPathLength = GetNearestNeighbourPathLength(cityLocation);
 tau0 = numberOfAnts/nearestNeighbourPathLength;
 
 targetPathLength = 123.0;

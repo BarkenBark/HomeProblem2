@@ -14,3 +14,6 @@ X2 = linspace(-5,5,resolution);
 
 F = loggedFunction(X1, X2);
 contour(X1, X2, F)
+title('Contout plot of f(x,y)', 'FontSize', 18)
+xlabel('x', 'FontSize', 18)
+ylabel('y', 'FontSize', 18)

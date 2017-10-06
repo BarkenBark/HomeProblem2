@@ -49,7 +49,7 @@ function [fitness, recordedState] = EvaluateIndividual(network, iDataSet, iSlope
     while simulationRunning
       iIteration = iIteration + 1;
       
-      slopeAngle = GetSlopeAngleAndreas(position, iSlope, iDataSet);
+      slopeAngle = GetSlopeAngle(position, iSlope, iDataSet);
       if slopeAngle < 0
         error('The slope angle should never be less than zero.')
       end

@@ -1,6 +1,6 @@
 % Particle swarm optimization
 
-clc; clear all
+%clc; clear all
 
 nbrOfParticles = 30;
 nbrOfIterations = 100;
@@ -46,4 +46,4 @@ swarmBestPosition = GetSwarmBestPosition(swarm, functionValue, ...
   functionBestValue, bestDefinition);
 minimum = f(swarmBestPosition);
 
-fprintf('Minimum f(x,y)=%.4f found at (x,y)=(%.2f,%.2f).\n', minimum, swarmBestPosition);
+fprintf('Minimum f(x,y)=%.6f found at (x,y)=(%.6f,%.6f).\n', minimum, swarmBestPosition);
