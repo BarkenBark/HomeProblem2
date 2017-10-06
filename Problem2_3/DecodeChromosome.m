@@ -1,4 +1,4 @@
-function network = DecodeChromosome(chromosome, networkDimensions, weightInterval, thresholdInterval)
+function network = DecodeChromosome(chromosome, geneOrder, networkDimensions, weightInterval, thresholdInterval)
 %DecodeChromosome Return the neural network encoded by chromosome
 
   minWeight = weightInterval(1);
@@ -13,13 +13,18 @@ function network = DecodeChromosome(chromosome, networkDimensions, weightInterva
   [nbrOfWeights, nbrOfThresholds] = GetNbrOfWeights(networkDimensions);
   weightElements = zeros(1, nbrOfWeights);
   thresholdElements = zeros(1, nbrOfThresholds);
-  for j = 1:nbrOfWeights
-    weightElements(j) = ...
+  
+  iWeight = 0;
+  for j = geneOrder(1:nbrOfWeights)
+    iWeight = iWeight + 1;
+    weightElements(iWeight) = ...
       minWeight + (maxWeight-minWeight)*chromosome(j);
   end
-  for j = 1:nbrOfThresholds
-    thresholdElements(j) = ...
-      minThreshold + (maxThreshold-minThreshold)*chromosome(j+nbrOfWeights);
+  iThreshold = 0;
+  for j = geneOrder(nbrOfWeights+1:end)
+    iThreshold = iThreshold + 1;
+    thresholdElements(iThreshold) = ...
+      minThreshold + (maxThreshold-minThreshold)*chromosome(j);
   end
   
   for iLayer = 1:nbrOfLayers-1
