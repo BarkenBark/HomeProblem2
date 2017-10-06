@@ -46,11 +46,11 @@ classdef FeedForwardNetwork < handle
       output = input;
       for iLayer = 1:obj.nbrOfLayers-1
         s = obj.weights{iLayer}*output - obj.thresholds{iLayer};
-        output = obj.activationFunction(s);
+        output = obj.ActivationFunction(s);
       end
     end
     
-    function value = activationFunction(obj, s)
+    function value = ActivationFunction(obj, s)
       value = 1./(1+exp(-obj.activationConstant*s));
     end
   end

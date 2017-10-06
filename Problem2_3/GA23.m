@@ -1,4 +1,7 @@
 %% Main code
+clc
+clear all
+figure
 
 iTrainingSet = 1;
 iValidationSet = 2;
@@ -7,24 +10,26 @@ iTestSet = 3;
 %Controller properties
 nbrOfHiddenNeurons = 8;
 networkDimensions = [3, nbrOfHiddenNeurons, 2];
-weightInterval = [-3, 3];
+weightInterval = [-6, 6];
 thresholdInterval = weightInterval;
 
 
 %% Genetic Algorithm
 
-NUMBER_OF_GENERATIONS = 200;
+NUMBER_OF_GENERATIONS = 50;
 COPIES_OF_BEST_INDIVIDUAL = 1;
 HOLDOUT_THRESHOLD = realmax; %HOLDOUT_THRESHOLD iterations without improvement => termination
 
-populationSize = 100; %POPULATION_SIZE?
+populationSize = 50; %POPULATION_SIZE?
 [nbrOfWeights, nbrOfThresholds] = GetNbrOfWeights(networkDimensions);
 nbrOfGenes = nbrOfWeights + nbrOfThresholds;
-mutationProbability = 1/nbrOfGenes;
-creepRate = 0.15;
+geneOrder = randperm(nbrOfGenes);
+
+mutationProbability = 3/nbrOfGenes;
+creepRate = 0.25;
 creepProbability = 0.85;
-tournamentSelectionParameter = 0.8;
-tournamentSize = 2;
+tournamentSelectionParameter = 0.70;
+tournamentSize = 3;
 crossoverProbability = 0.3;
 
 population = InitializePopulation(populationSize, networkDimensions);
@@ -48,7 +53,7 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
   
   for iIndividual = 1:populationSize
     chromosome = population(iIndividual,:);
-    network = DecodeChromosome(chromosome, networkDimensions, ...
+    network = DecodeChromosome(chromosome, geneOrder, networkDimensions, ...
       weightInterval, thresholdInterval);
     trainingFitness(iIndividual) = EvaluateIndividual(network, iTrainingSet);
     validationFitness(iIndividual) = EvaluateIndividual(network, iValidationSet);
@@ -122,12 +127,18 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
     COPIES_OF_BEST_INDIVIDUAL);
   population = tempPopulation;
  
-  if mod(iGeneration, NUMBER_OF_GENERATIONS/50)==0
+  if mod(iGeneration, NUMBER_OF_GENERATIONS/20)==0
     t = toc(t);
     fprintf('Generation %d/%d complete after %.2f seconds.\n', ...
       iGeneration, NUMBER_OF_GENERATIONS, t)
     t = tic;
   end
+  
+  clf
+  hold on
+  plot(maximumTrainingFitness(1:iGeneration))
+  plot(maximumValidationFitness(1:iGeneration))
+  drawnow
  
 end
 

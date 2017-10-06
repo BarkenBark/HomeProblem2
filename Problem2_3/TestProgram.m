@@ -1,10 +1,10 @@
 %% TestProgram
 
-result = load('BestNetworkFinal.mat');
+result = load('durr.mat');
 bestNetwork = result.BestNetwork;
 
-iDataSet = 3;
-iSlope = 1;
+iDataSet = 2;
+iSlope = 4;
 
 [fitness, state] = EvaluateIndividual(bestNetwork, iDataSet, iSlope);
 
