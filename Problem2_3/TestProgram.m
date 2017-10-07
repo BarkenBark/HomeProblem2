@@ -1,10 +1,13 @@
 %% TestProgram
 
+figure 
+
 result = load('BestNetwork.mat');
 bestNetwork = result.BestNetwork;
 
 iDataSet = 1;
-iSlope = 10;
+iSlope = 7;
+slopeLength = 1000;
 
 [fitness, state] = EvaluateIndividual(bestNetwork, iDataSet, iSlope);
 
@@ -13,6 +16,7 @@ iSlope = 10;
 for iPlot = 1:5
   subplot(5, 1, iPlot);
   plot(state(:,1), state(:,iPlot+1))
+  xlim([0 slopeLength])
 end
 
 if iDataSet == 1

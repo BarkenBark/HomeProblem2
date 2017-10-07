@@ -15,6 +15,7 @@ function [fitness, recordedState] = EvaluateIndividual(network, iDataSet, iSlope
   maxSpeed = 25;
   minSpeed = 1;
   maxSlopeAngle = 10;
+  minSlopeAngle = 0;
   slopeLength = 1000;
   %Note: Get maxBrakeTemperature from truck properties
 
@@ -50,8 +51,10 @@ function [fitness, recordedState] = EvaluateIndividual(network, iDataSet, iSlope
       iIteration = iIteration + 1;
       
       slopeAngle = GetSlopeAngle(position, iSlope, iDataSet);
-      if slopeAngle < 0
-        error('The slope angle should never be less than zero.')
+      if slopeAngle < minSlopeAngle
+        error('The slope angle should never be less than %d.', minSlopeAngle)
+      elseif slopeAngle > maxSlopeAngle
+        error('The slope angle should never be greater than %d.', maxSlopeAngle)
       end
       
       recordedPosition(iIteration) = position;
@@ -107,6 +110,6 @@ function [fitness, recordedState] = EvaluateIndividual(network, iDataSet, iSlope
     
   end
 
-  fitness = min(slopeFitness);
+  fitness = mean(slopeFitness);
   
 end

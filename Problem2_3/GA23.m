@@ -7,20 +7,20 @@ iTrainingSet = 1;
 iValidationSet = 2;
 iTestSet = 3;
 
-%Controller properties
-nbrOfHiddenNeurons = 8;
+%Controller/Network properties
+nbrOfHiddenNeurons = 6;
 networkDimensions = [3, nbrOfHiddenNeurons, 2];
-weightInterval = [-7, 7];
+weightInterval = [-9, 9];
 thresholdInterval = weightInterval;
 
 
 %% Genetic Algorithm
 
-NUMBER_OF_GENERATIONS = 1000;
+NUMBER_OF_GENERATIONS = 2000;
 COPIES_OF_BEST_INDIVIDUAL = 1;
-HOLDOUT_THRESHOLD = 100; %HOLDOUT_THRESHOLD iterations without improvement => termination
+HOLDOUT_THRESHOLD = realmax; %No. generations to wait for improvement before termination
 
-populationSize = 200; %POPULATION_SIZE?
+populationSize = 100; %POPULATION_SIZE?
 [nbrOfWeights, nbrOfThresholds] = GetNbrOfWeights(networkDimensions);
 nbrOfGenes = nbrOfWeights + nbrOfThresholds;
 geneOrder = randperm(nbrOfGenes);
@@ -29,7 +29,7 @@ mutationProbability = 3/nbrOfGenes;
 creepRate = 0.25;
 creepProbability = 0.85;
 tournamentSelectionParameter = 0.70;
-tournamentSize = 3;
+tournamentSize = 2;
 crossoverProbability = 0.3;
 
 population = InitializePopulation(populationSize, networkDimensions);
@@ -49,39 +49,43 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
   validationFitness = zeros(populationSize, 1);
   maximumTrainingFitness(iGeneration) = 0.0;
   maximumValidationFitness(iGeneration) = 0.0;
-  bestIndividualIndex = 0; %Based on training set, for GA feedback
+  bestIndividualIndex = 0;
   
   for iIndividual = 1:populationSize
     chromosome = population(iIndividual,:);
     network = DecodeChromosome(chromosome, geneOrder, networkDimensions, ...
       weightInterval, thresholdInterval);
     trainingFitness(iIndividual) = EvaluateIndividual(network, iTrainingSet);
-    validationFitness(iIndividual) = EvaluateIndividual(network, iValidationSet);
+    %validationFitness(iIndividual) = EvaluateIndividual(network, iValidationSet);
     
     if trainingFitness(iIndividual) > maximumTrainingFitness(iGeneration)
       maximumTrainingFitness(iGeneration) = trainingFitness(iIndividual);
       bestIndividualIndex = iIndividual;
     end
     
-    if validationFitness(iIndividual) > maximumValidationFitness(iGeneration)
-      maximumValidationFitness(iGeneration) = validationFitness(iIndividual);
-      bestValidationIndividualIndex = iIndividual;
-    end
+%     if validationFitness(iIndividual) > maximumValidationFitness(iGeneration)
+%       maximumValidationFitness(iGeneration) = validationFitness(iIndividual);
+%       bestValidationIndividualIndex = iIndividual;
+%     end
   end
   bestIndividual = population(bestIndividualIndex, :);
   
-  if iGeneration > 1
-  deltaValidationFitness = maximumValidationFitness(iGeneration) - ...
-    maximumValidationFitness(iGeneration-1);
-  else
-    deltaValidationFitness = maximumValidationFitness(iGeneration);
-  end
+  bestNetwork = DecodeChromosome(bestIndividual, geneOrder, networkDimensions, ...
+      weightInterval, thresholdInterval);
+  maximumValidationFitness(iGeneration) = EvaluateIndividual(bestNetwork, iValidationSet);
+  
+%   if iGeneration > 1
+%   deltaValidationFitness = maximumValidationFitness(iGeneration) - ...
+%     maximumValidationFitness(iGeneration-1);
+%   else
+%     deltaValidationFitness = maximumValidationFitness(iGeneration) - 0;
+%   end
   
   if maximumValidationFitness(iGeneration) <= maximumValidationFitnessSoFar
     holdoutStrikes = holdoutStrikes + 1;
     if holdoutStrikes == HOLDOUT_THRESHOLD
       fprintf(strcat('Optimization terminated due to no increase in',  ...
-        ' maximum validation fitness in %d generations.\n'), iGeneration)
+        ' maximum validation fitness in %d generations.\n'), HOULDOUT_THRESHOLD)
       maximumTrainingFitness(iGeneration+1:end) = [];
       maximumValidationFitness(iGeneration+1:end) = [];
       break
@@ -90,10 +94,9 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
     holdoutStrikes = 0;
   end
     
-  
   if maximumValidationFitness(iGeneration) > maximumValidationFitnessSoFar
     maximumValidationFitnessSoFar = maximumValidationFitness(iGeneration);
-    bestValidationIndividual = population(bestValidationIndividualIndex,:);
+    bestValidationIndividual = bestIndividual;
   end
   
   tempPopulation = population;
@@ -116,6 +119,7 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
     end
   end
 
+  %Mutation
   for i = 1:populationSize
     originalChromosome = tempPopulation(i,:);
     mutatedChromosome = Mutate(originalChromosome, mutationProbability, ...
@@ -142,7 +146,8 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
  
 end
 
-
+filename = strcat(date, '-', num2str(randi(100)));
+save(filename)
 
 
 
