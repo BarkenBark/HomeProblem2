@@ -117,6 +117,10 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
   hold on
   plot(maximumTrainingFitness(1:iGeneration))
   plot(maximumValidationFitness(1:iGeneration))
+  set(gca, 'FontSize', 14)
+  xlabel('Generation')
+  ylabel('Fitness')
+  legend({'Training', 'Validation'}, 'Location', 'southeast')
   drawnow
  
 end
