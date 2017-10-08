@@ -11,24 +11,24 @@ function probability = GetProbability(tabuList, pheromoneLevel, visibility, alph
   normalizingDenominator = 0;
   
   for l = candidateNodes
-    tmp = pheromoneLevel(l,j)^alpha * visibility(l,j)^beta;
-    normalizingDenominator = normalizingDenominator + tmp;
+    probabilityTerm = pheromoneLevel(l,j)^alpha * visibility(l,j)^beta;
+    normalizingDenominator = normalizingDenominator + probabilityTerm;
   end
-  if normalizingDenominator == 0 %If pheromone levels are too low to be numerically processed, uniformly chose next node
+  if normalizingDenominator == 0 %If pheromone levels are too low to be numerically processed, uniformly choose next node
     probability = rand(1, numberOfCandidateNodes);
     probability = probability/sum(probability);
     disp('Pheromone levels on some edges have dropped very low.')
     disp('Ants follow locally optimal path almost definitively.')
-    disp('Restart of optimization is with other parameters is recommended.')
+    disp('Restart of optimization with other parameters is recommended.')
     disp(' ')
     return
   end
   
   iProb = 0;
   for i = candidateNodes
-    tmp = pheromoneLevel(i,j)^alpha * visibility(i,j)^beta;
+    probabilityTerm = pheromoneLevel(i,j)^alpha * visibility(i,j)^beta;
     iProb = iProb + 1;
-    probability(iProb) = tmp/normalizingDenominator;
+    probability(iProb) = probabilityTerm/normalizingDenominator;
   end
 
 end

@@ -6,19 +6,19 @@ function pathLength = GetNearestNeighbourPathLength(cityLocation)
   nodesToVisit = 1:nbrOfCities;
 
   %Generate NN path
-  [currentNode, index] = datasample(nodesToVisit, 1);
+  [currentNode, iNodeToVisit] = datasample(nodesToVisit, 1);
   path(1) = currentNode;
   for iCity = 1:nbrOfCities-1
     currentCityLocation = cityLocation(currentNode,:);
-    nodesToVisit(index) = [];
+    nodesToVisit(iNodeToVisit) = [];
     distances = zeros(nbrOfCities-iCity, 1);
     for i = 1:nbrOfCities-iCity
       nextNode = nodesToVisit(i);
       nextCityLocation = cityLocation(nextNode,:);
       distances(i) = norm(nextCityLocation - currentCityLocation);
     end
-    [~,index] = min(distances);
-    currentNode = nodesToVisit(index);
+    [~,iNodeToVisit] = min(distances);
+    currentNode = nodesToVisit(iNodeToVisit);
     path(iCity+1) = currentNode;
   end
 

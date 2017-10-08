@@ -30,9 +30,6 @@ function fitness = EvaluateIndividual(chromosome, dataset, ...
   if error ~= 0
     fitness = penaltyFactor*1/error;
   else
-    fprintf('Oh snap! Perfect solution found!');
-    load handel
-    sound(y,Fs)
     fitness = realmax;
   end
   

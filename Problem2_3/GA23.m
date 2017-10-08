@@ -9,19 +9,18 @@ iTestSet = 3;
 %Controller/Network properties
 nbrOfHiddenNeurons = 8;
 networkDimensions = [3, nbrOfHiddenNeurons, 2];
-weightInterval = [-12, 12];
+weightInterval = [-14, 14];
 thresholdInterval = weightInterval;
 
 
 %% Genetic Algorithm
-NUMBER_OF_GENERATIONS = 500;
+NUMBER_OF_GENERATIONS = 750;
 COPIES_OF_BEST_INDIVIDUAL = 1;
 HOLDOUT_THRESHOLD = realmax; %No. generations to wait for improvement before termination
 
 populationSize = 100;
 [nbrOfWeights, nbrOfThresholds] = GetNbrOfWeights(networkDimensions);
 nbrOfGenes = nbrOfWeights + nbrOfThresholds;
-geneOrder = 1:nbrOfGenes;
 
 mutationProbability = 4/nbrOfGenes;
 creepRate = 0.25;
@@ -42,13 +41,13 @@ t = tic;
 holdoutStrikes = 0;
 for iGeneration = 1:NUMBER_OF_GENERATIONS
 
-  %Evaluate individuals
+  %Evaluate population
   trainingFitness = zeros(populationSize, 1);
   validationFitness = zeros(populationSize, 1);
   iBestIndividual = 0;
   for iIndividual = 1:populationSize
     chromosome = population(iIndividual,:);
-    network = DecodeChromosome(chromosome, geneOrder, networkDimensions, ...
+    network = DecodeChromosome(chromosome, networkDimensions, ...
       weightInterval, thresholdInterval);
     trainingFitness(iIndividual) = EvaluateIndividual(network, iTrainingSet);
     if trainingFitness(iIndividual) > maximumTrainingFitness(iGeneration)
@@ -122,8 +121,28 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
  
 end
 
-filename = strcat(date, '-', num2str(6));
-save(filename)
+%Final Evaluation
+trainingFitness = zeros(populationSize, 1);
+validationFitness = zeros(populationSize, 1);
+iBestIndividual = 0;
+for iIndividual = 1:populationSize
+  chromosome = population(iIndividual,:);
+  network = DecodeChromosome(chromosome, networkDimensions, ...
+    weightInterval, thresholdInterval);
+  trainingFitness(iIndividual) = EvaluateIndividual(network, iTrainingSet);
+  if trainingFitness(iIndividual) > maximumTrainingFitness(iGeneration)
+    maximumTrainingFitness(iGeneration) = trainingFitness(iIndividual);
+    iBestIndividual = iIndividual;
+    bestNetwork = network;
+  end
+end
+bestIndividual = population(iBestIndividual, :);
+
+maximumValidationFitness(iGeneration) = EvaluateIndividual(bestNetwork, iValidationSet);
+if maximumValidationFitness(iGeneration) > maximumValidationFitnessSoFar
+  maximumValidationFitnessSoFar = maximumValidationFitness(iGeneration);
+  bestValidationIndividual = bestIndividual;
+end
 
 
 

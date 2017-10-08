@@ -1,5 +1,5 @@
-%clear all; clc;
-%close all
+clear all; clc;
+close all
 
 cityLocations = LoadCityLocations;
 nbrOfCities = length(cityLocations);
@@ -15,7 +15,7 @@ mutationProbability = 0.04;
 tournamentSelectionParameter = 0.8;
 tournamentSize = 2;
 
-%% Start genetic algorithm
+%% Run GA
 
 fitness = zeros(populationSize,1);
 population = InitializePopulation(populationSize, nbrOfGenes);
@@ -24,7 +24,7 @@ t = tic;
 prevMaximumFitness = 0;
 for iGeneration = 1:NUMBER_OF_GENERATIONS
 
-  %Find best individual of population to preserve it for next generation
+  %Evaluate population
   if iGeneration > 1
     prevMaximumFitness = maximumFitness;
   end
@@ -73,7 +73,7 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
   
 end
 
-%Find best individual of population to evaluate
+%Final evaluation
 maximumFitness = 0.0;
 bestIndividualIndex = 0;
 for i = 1:populationSize

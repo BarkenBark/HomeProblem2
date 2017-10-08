@@ -3,47 +3,50 @@ clc; clear all;
 
 dataset = LoadFunctionData;
 
-nbrOfVariableRegisters = 3; %As many as you like
-constantRegisters = [1 3 -1]; %As many as you like
+nbrOfVariableRegisters = 3;
+constantRegisters = [1 3 -1];
 nbrOfConstantRegisters = length(constantRegisters);
 encodingSetSizes = [4, nbrOfVariableRegisters, nbrOfConstantRegisters];
+minNbrOfInstructions = 5;
+maxNbrOfInstructions = 30;
 
 populationSize = 100;
 tournamentSelectionParameter = 0.75;
 tournamentSize = 5;
-mutationProbability = 1; %Initial value only
+mutationProbability = 1.03; %Initial value
 crossoverProbability = 0.2;
-minNbrOfInstructions = 5;
-maxNbrOfInstructions = 30;
 
 NUMBER_OF_GENERATIONS = 5000;
 COPIES_OF_BEST_INDIVIDUAL = 1;
 
 %% Run GA
-
 fitness = zeros(populationSize, 1);
 population = InitializePopulation(populationSize, encodingSetSizes, minNbrOfInstructions, maxNbrOfInstructions);
 
+t = tic;
 for iGeneration = 1:NUMBER_OF_GENERATIONS
-  t = tic;
   
-  %Find best individual of population to preserve it for next generation
+  %Evaluate population
   maximumFitness = 0.0;
-  bestIndividualIndex = 0;
+  iBestIndividual = 0;
   for i = 1:populationSize
     chromosome = population(i).Chromosome;
     fitness(i) = EvaluateIndividual(chromosome, dataset, ...
       nbrOfVariableRegisters, constantRegisters, maxNbrOfInstructions);
     if (fitness(i) > maximumFitness)
       maximumFitness = fitness(i);
-      bestIndividualIndex = i;
+      iBestIndividual = i;
     end
   end
-  bestIndividual = population(bestIndividualIndex).Chromosome;
+  bestIndividual = population(iBestIndividual).Chromosome;
+  
+  if maximumFitness == realmax %If perfect solution is found
+    break
+  end
 
   tempPopulation = population;
 
-  %Carry out selection and crossover
+  %Selection and crossover
   for i = 1:2:populationSize
     i1 = TournamentSelect(fitness, tournamentSelectionParameter, tournamentSize);
     i2 = TournamentSelect(fitness, tournamentSelectionParameter, tournamentSize);
@@ -68,29 +71,31 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
       encodingSetSizes);
     tempPopulation(i).Chromosome = mutatedChromosome;
   end
+  
   mutationProbability = exp(-iGeneration/100) + 0.03;
 
   tempPopulation = InsertBestIndividual(tempPopulation, bestIndividual, COPIES_OF_BEST_INDIVIDUAL);
   population = tempPopulation;
 
-  t = toc(t);
-  fprintf('Generation %d completed after %.2f seconds.\n', iGeneration, t);
+  if mod(iGeneration, NUMBER_OF_GENERATIONS/500)==0
+    t = toc(t);
+    fprintf('Generation %d/%d complete after %.2f seconds.\n', ...
+      iGeneration, NUMBER_OF_GENERATIONS, t)
+    t = tic;
+  end
   
 end
 
 %Find best individual of population to evaluate
 maximumFitness = 0.0;
-bestIndividualIndex = 0;
+iBestIndividual = 0;
 for i = 1:populationSize
   chromosome = population(i).Chromosome;
   fitness(i) = EvaluateIndividual(chromosome, dataset, ...
       nbrOfVariableRegisters, constantRegisters, maxNbrOfInstructions);
   if (fitness(i) > maximumFitness)
     maximumFitness = fitness(i);
-    bestIndividualIndex = i;
+    iBestIndividual = i;
   end
 end
-
-load handel
-sound(y,Fs)
 

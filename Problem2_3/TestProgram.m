@@ -1,10 +1,10 @@
 %% TestProgram
-netToLoad = 'BestNetwork-Oct7-3.mat';
+netToLoad = 'BestNetwork-Oct8-6.mat';
 result = load(netToLoad);
 bestNetwork = result.BestNetwork;
 
-iDataSet = 1;
-iSlope = 2;
+iDataSet = 3;
+iSlope = 1;
 SLOPE_LENGTH = 1000;
 
 [fitness, state] = EvaluateIndividual(bestNetwork, iDataSet, iSlope);

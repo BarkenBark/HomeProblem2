@@ -1,21 +1,23 @@
 %% TestFit
-% Hard code best function found
-% Output both original data and my best fist
-% Produce Error as text in console
+clf
+
+gNumerator = @(x) x.^3 - x.^2 + 1;
+gDenominator = @(x) x.^4 - x.^2 + 1;
+g = @(x) gNumerator(x)./gDenominator(x);
 
 dataset = LoadFunctionData;
 input = dataset(:,1);
 targetOutput = dataset(:,2);
-
-fNumerator = @(x) 54*x + 36;
-fDenominator = @(x) 36*x.^2 + 45*x + 32;
-
-f = @(x) fNumerator(x)/fDenominator(x);
-
-y = f(input);
+y = g(input);
 
 hold on
-plot(input, targetOutput)
-plot(input, y)
+plot(input, y, 'LineWidth', 2, 'Color', 'cyan')
+plot(input, targetOutput, '.', 'Color', 'black')
+set(gca, 'FontSize', 12)
+legend({'$\hat{g}(x)$', '$g(x)$'}, 'Interpreter', 'latex', 'FontSize', 14)
+title('Original data and best fit', 'FontSize', 18)
+xlabel('$x$', 'Interpreter', 'Latex', 'FontSize', 18)
+ylabel('$y$', 'Interpreter', 'Latex', 'FontSize', 18)
 
-error = Error(targetOutput, y)
+error = Error(targetOutput, y);
+fprintf('Total error of fitted function: %d\n', error);

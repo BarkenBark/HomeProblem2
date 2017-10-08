@@ -21,7 +21,6 @@ alpha = 1;
 beta = 4.0;        
 rho = 0.5;          
 
-% Done: Write the GetNearestNeighbourPathLength function
 nearestNeighbourPathLength = GetNearestNeighbourPathLength(cityLocation);
 tau0 = numberOfAnts/nearestNeighbourPathLength;
 

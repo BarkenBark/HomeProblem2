@@ -10,9 +10,8 @@ function node = GetNode(tabuList, pheromoneLevel, visibility, alpha, beta)
     return
   end
 
-  probability = GetProbability(tabuList, pheromoneLevel, visibility, alpha, beta);
-  
-  [sortedProbability, probabilityIndex] = sort(probability, 'ascend');  
+  nextNodeProbability = GetProbability(tabuList, pheromoneLevel, visibility, alpha, beta);
+  [sortedProbability, probabilityIndex] = sort(nextNodeProbability, 'ascend');  
   
   r = rand;
   cumulativeProbability = 0;
