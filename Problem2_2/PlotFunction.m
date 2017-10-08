@@ -30,8 +30,3 @@ text(minima(1,1) - 1, minima(1,2) + 0.5, '(3.00,2.00)', 'FontSize', 18, 'Interpr
 text(minima(2,1)-1, minima(2,2)+0.5, '(3.58, -1.85)', 'FontSize', 18, 'Interpreter', 'Latex') 
 text(minima(3,1)-1, minima(3,2)+0.5, '(-3.78, -3.28)', 'FontSize', 18, 'Interpreter', 'Latex') 
 text(minima(4,1)-1, minima(4,2)+0.5, '(-2.81, 3.13)', 'FontSize', 18, 'Interpreter', 'Latex') 
-
-% text(minima(1,1) - 1, minima(1,2) + 0.5, '(3.00,2.00)', 'FontSize', 18, 'Interpreter', 'Latex') 
-% text(minima(2,1), minima(2,2), '$\quad \leftarrow$ b', 'FontSize', 18, 'Interpreter', 'Latex') 
-% text(minima(3,1), minima(3,2), '$\quad \leftarrow$ c', 'FontSize', 18, 'Interpreter', 'Latex') 
-% text(minima(4,1), minima(4,2), '$\quad \leftarrow$ d', 'FontSize', 18, 'Interpreter', 'Latex') 

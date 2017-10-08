@@ -1,31 +1,29 @@
 %% Main code
-clc
-clear all
-figure
+clc; clear all
+clf; close all
 
 iTrainingSet = 1;
 iValidationSet = 2;
 iTestSet = 3;
 
 %Controller/Network properties
-nbrOfHiddenNeurons = 6;
+nbrOfHiddenNeurons = 8;
 networkDimensions = [3, nbrOfHiddenNeurons, 2];
-weightInterval = [-9, 9];
+weightInterval = [-12, 12];
 thresholdInterval = weightInterval;
 
 
 %% Genetic Algorithm
-
-NUMBER_OF_GENERATIONS = 2000;
+NUMBER_OF_GENERATIONS = 500;
 COPIES_OF_BEST_INDIVIDUAL = 1;
 HOLDOUT_THRESHOLD = realmax; %No. generations to wait for improvement before termination
 
-populationSize = 100; %POPULATION_SIZE?
+populationSize = 100;
 [nbrOfWeights, nbrOfThresholds] = GetNbrOfWeights(networkDimensions);
 nbrOfGenes = nbrOfWeights + nbrOfThresholds;
-geneOrder = randperm(nbrOfGenes);
+geneOrder = 1:nbrOfGenes;
 
-mutationProbability = 3/nbrOfGenes;
+mutationProbability = 4/nbrOfGenes;
 creepRate = 0.25;
 creepProbability = 0.85;
 tournamentSelectionParameter = 0.70;
@@ -43,60 +41,38 @@ bestValidationIndividual = zeros(1, nbrOfGenes);
 t = tic;
 holdoutStrikes = 0;
 for iGeneration = 1:NUMBER_OF_GENERATIONS
-  
+
   %Evaluate individuals
   trainingFitness = zeros(populationSize, 1);
   validationFitness = zeros(populationSize, 1);
-  maximumTrainingFitness(iGeneration) = 0.0;
-  maximumValidationFitness(iGeneration) = 0.0;
-  bestIndividualIndex = 0;
-  
+  iBestIndividual = 0;
   for iIndividual = 1:populationSize
     chromosome = population(iIndividual,:);
     network = DecodeChromosome(chromosome, geneOrder, networkDimensions, ...
       weightInterval, thresholdInterval);
     trainingFitness(iIndividual) = EvaluateIndividual(network, iTrainingSet);
-    %validationFitness(iIndividual) = EvaluateIndividual(network, iValidationSet);
-    
     if trainingFitness(iIndividual) > maximumTrainingFitness(iGeneration)
       maximumTrainingFitness(iGeneration) = trainingFitness(iIndividual);
-      bestIndividualIndex = iIndividual;
+      iBestIndividual = iIndividual;
+      bestNetwork = network;
     end
-    
-%     if validationFitness(iIndividual) > maximumValidationFitness(iGeneration)
-%       maximumValidationFitness(iGeneration) = validationFitness(iIndividual);
-%       bestValidationIndividualIndex = iIndividual;
-%     end
   end
-  bestIndividual = population(bestIndividualIndex, :);
+  bestIndividual = population(iBestIndividual, :);
   
-  bestNetwork = DecodeChromosome(bestIndividual, geneOrder, networkDimensions, ...
-      weightInterval, thresholdInterval);
   maximumValidationFitness(iGeneration) = EvaluateIndividual(bestNetwork, iValidationSet);
-  
-%   if iGeneration > 1
-%   deltaValidationFitness = maximumValidationFitness(iGeneration) - ...
-%     maximumValidationFitness(iGeneration-1);
-%   else
-%     deltaValidationFitness = maximumValidationFitness(iGeneration) - 0;
-%   end
-  
-  if maximumValidationFitness(iGeneration) <= maximumValidationFitnessSoFar
+  if maximumValidationFitness(iGeneration) > maximumValidationFitnessSoFar
+    maximumValidationFitnessSoFar = maximumValidationFitness(iGeneration);
+    bestValidationIndividual = bestIndividual;
+    holdoutStrikes = 0;
+  else
     holdoutStrikes = holdoutStrikes + 1;
     if holdoutStrikes == HOLDOUT_THRESHOLD
       fprintf(strcat('Optimization terminated due to no increase in',  ...
-        ' maximum validation fitness in %d generations.\n'), HOULDOUT_THRESHOLD)
+        ' maximum validation fitness in %d generations.\n'), HOLDOUT_THRESHOLD)
       maximumTrainingFitness(iGeneration+1:end) = [];
       maximumValidationFitness(iGeneration+1:end) = [];
       break
     end
-  else
-    holdoutStrikes = 0;
-  end
-    
-  if maximumValidationFitness(iGeneration) > maximumValidationFitnessSoFar
-    maximumValidationFitnessSoFar = maximumValidationFitness(iGeneration);
-    bestValidationIndividual = bestIndividual;
   end
   
   tempPopulation = population;
@@ -131,7 +107,7 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
     COPIES_OF_BEST_INDIVIDUAL);
   population = tempPopulation;
  
-  if mod(iGeneration, NUMBER_OF_GENERATIONS/500)==0
+  if mod(iGeneration, NUMBER_OF_GENERATIONS/50)==0
     t = toc(t);
     fprintf('Generation %d/%d complete after %.2f seconds.\n', ...
       iGeneration, NUMBER_OF_GENERATIONS, t)
@@ -146,7 +122,7 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
  
 end
 
-filename = strcat(date, '-', num2str(randi(100)));
+filename = strcat(date, '-', num2str(6));
 save(filename)
 
 

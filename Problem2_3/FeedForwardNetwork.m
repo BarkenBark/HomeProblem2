@@ -5,7 +5,8 @@ classdef FeedForwardNetwork < handle
     thresholds; %Cell vector of threshold vectors
     networkDimensions;
     nbrOfLayers;
-    activationConstant = 1; %Constant in logistic sigmoid activation function
+    
+    ACTIVATION_CONSTANT = 1;
   end
   
   methods
@@ -21,27 +22,6 @@ classdef FeedForwardNetwork < handle
       obj.thresholds = thresholds;
     end
     
-    function RandomlyInitializeWeights(obj, weightInterval, thresholdInterval) %To be removed
-      for iLayer = 1:obj.nbrOfLayers-1
-        weightDimension = [obj.networkDimensions(iLayer+1), ...
-          obj.networkDimensions(iLayer)];
-        thresholdDimension = [obj.networkDimensions(iLayer+1), 1];
-        
-        minWeight = weightInterval(1);
-        maxWeight = weightInterval(2);
-        tmp = rand(weightDimension);
-        tmpWeights = minWeight + (maxWeight-minWeight).*tmp;
-        
-        minThreshold = thresholdInterval(1);
-        maxThreshold = thresholdInterval(2);
-        tmp = rand(thresholdDimension);
-        tmpThresholds = minThreshold + (maxThreshold-minThreshold).*tmp;
-        
-        obj.weights{iLayer} = tmpWeights;
-        obj.thresholds{iLayer} = tmpThresholds;
-      end
-    end
-    
     function output = ForwardPropagate(obj, input)
       output = input;
       for iLayer = 1:obj.nbrOfLayers-1
@@ -51,7 +31,7 @@ classdef FeedForwardNetwork < handle
     end
     
     function value = ActivationFunction(obj, s)
-      value = 1./(1+exp(-obj.activationConstant*s));
+      value = 1./(1+exp(-obj.ACTIVATION_CONSTANT*s));
     end
   end
   

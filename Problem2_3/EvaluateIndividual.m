@@ -12,16 +12,16 @@ function [fitness, recordedState] = EvaluateIndividual(network, iDataSet, iSlope
   end
 
   %Limits
-  maxSpeed = 25;
-  minSpeed = 1;
-  maxSlopeAngle = 10;
-  minSlopeAngle = 0;
-  slopeLength = 1000;
   %Note: Get maxBrakeTemperature from truck properties
+  MAX_SPEED = 25;
+  MIN_SPEED = 1;
+  MAX_SLOPE_ANGLE = 10;
+  MIN_SLOPE_ANGLE = 0;
+  SLOPE_LENGTH = 1000;
 
   %Simulation parameters
-  deltaT = 0.1;
-  predictedNbrOfIterations = 6000; %To make code slightly faster per MATLAB's recommendation
+  DELTA_T = 0.1;
+  predictedNbrOfIterations = 50/DELTA_T; %To make code slightly faster per MATLAB's recommendation
   
   %Commence evaluation
   slopeFitness = [];
@@ -35,7 +35,7 @@ function [fitness, recordedState] = EvaluateIndividual(network, iDataSet, iSlope
     brakePressure = 0;
     
     truck = TruckModel(position, speed, brakeTemperature, gear, brakePressure);
-    maxBrakeTemperature = truck.maxBrakeTemperature;
+    maxBrakeTemperature = truck.MAX_BRAKE_TEMPERATURE;
     
     recordedPosition = zeros(predictedNbrOfIterations, 1);
     recordedSlopeAngle = zeros(predictedNbrOfIterations, 1);
@@ -51,10 +51,10 @@ function [fitness, recordedState] = EvaluateIndividual(network, iDataSet, iSlope
       iIteration = iIteration + 1;
       
       slopeAngle = GetSlopeAngle(position, iSlope, iDataSet);
-      if slopeAngle < minSlopeAngle
-        error('The slope angle should never be less than %d.', minSlopeAngle)
-      elseif slopeAngle > maxSlopeAngle
-        error('The slope angle should never be greater than %d.', maxSlopeAngle)
+      if slopeAngle < MIN_SLOPE_ANGLE
+        error('The slope angle should never be less than %d.', MIN_SLOPE_ANGLE)
+      elseif slopeAngle > MAX_SLOPE_ANGLE
+        error('The slope angle should never be greater than %d.', MAX_SLOPE_ANGLE)
       end
       
       recordedPosition(iIteration) = position;
@@ -64,34 +64,34 @@ function [fitness, recordedState] = EvaluateIndividual(network, iDataSet, iSlope
       recordedSpeed(iIteration) = speed;
       recordedBrakeTemperature(iIteration) = brakeTemperature;
       
-      input(1) = speed/maxSpeed;
-      input(2) = slopeAngle/maxSlopeAngle;
+      input(1) = speed/MAX_SPEED;
+      input(2) = slopeAngle/MAX_SLOPE_ANGLE;
       input(3) = brakeTemperature/maxBrakeTemperature;
       
       output = network.ForwardPropagate(input);
       gearChangeRequest = output(1);
       brakePressure = output(2);
-      
       if gearChangeRequest <= 1/3
         truck.ShiftGear('down');
       elseif gearChangeRequest > 2/3
         truck.ShiftGear('up');
       end
       truck.ApplyBrakePressure(brakePressure);
-      [gear, brakePressure] = truck.GetControllables;
 
-      truck.UpdateDynamics(slopeAngle, deltaT);
+      truck.UpdateDynamics(slopeAngle, DELTA_T);
+      
+      [gear, brakePressure] = truck.GetControllables;
       [position, speed, brakeTemperature] = truck.GetDynamics;
       
-      isWithinSpeedLimits = (speed <= maxSpeed) && (speed >= minSpeed);
+      isWithinSpeedLimits = (speed <= MAX_SPEED) && (speed >= MIN_SPEED);
       isBelowBrakeTempLimit = (brakeTemperature <= maxBrakeTemperature);
       isSatisfyingConstraints = isWithinSpeedLimits && isBelowBrakeTempLimit;
-      isWithinSlope = (position <= slopeLength);
+      isWithinSlope = (position <= SLOPE_LENGTH);
       simulationRunning = isSatisfyingConstraints && isWithinSlope;
     end
     
-    if position > slopeLength
-      distanceTraveled = slopeLength;
+    if position > SLOPE_LENGTH
+      distanceTraveled = SLOPE_LENGTH;
     else
       distanceTraveled = position;
     end
@@ -106,10 +106,11 @@ function [fitness, recordedState] = EvaluateIndividual(network, iDataSet, iSlope
       recordedGear, recordedSpeed, recordedBrakeTemperature];
     
     averageSpeed = mean(recordedSpeed);
-    slopeFitness = [slopeFitness, averageSpeed*distanceTraveled];
+    thisSlopeFitness = averageSpeed*distanceTraveled;
+    slopeFitness = [slopeFitness, thisSlopeFitness];
     
   end
 
-  fitness = mean(slopeFitness);
+  fitness = min(slopeFitness);
   
 end

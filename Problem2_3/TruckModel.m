@@ -14,14 +14,14 @@ classdef TruckModel < handle
     brakePressure;
     
     %Constants
-    mass = 20000;
-    maxBrakeTemperature = 750;
-    ambientBrakeTemperature = 283;
-    engineBrakingConstant = 3000;
-    gearBrakingFactors = [7, 5, 4, 3, 2.5, 2, 1.6, 1.4, 1.2, 1];
-    gearRestPeriod = 2;
-    tau = 30;
-    Ch = 40;
+    MASS = 20000;
+    MAX_BRAKE_TEMPERATURE = 750;
+    AMBIENT_BRAKE_TEMPERATURE = 283;
+    ENGINE_BRAKING_CONSTANT = 3000;
+    GEAR_BRAKING_FACTORS = [7, 5, 4, 3, 2.5, 2, 1.6, 1.4, 1.2, 1];
+    GEAR_REST_PERIOD = 2;
+    TAU = 30;
+    HEAT_CONSTANT = 40;
   end
   
   
@@ -44,9 +44,9 @@ classdef TruckModel < handle
     end
 
     function ShiftGear(obj, direction)
-      maxGear = length(obj.gearBrakingFactors);
+      maxGear = length(obj.GEAR_BRAKING_FACTORS);
       minGear = 1;
-      if obj.gearRestTime >= obj.gearRestPeriod
+      if obj.gearRestTime >= obj.GEAR_REST_PERIOD
         if strcmp(direction, 'up')
           if obj.gear < maxGear
             obj.gear = obj.gear + 1;
@@ -73,7 +73,7 @@ classdef TruckModel < handle
       
       obj.speed = obj.speed + acceleration*deltaT;
       
-      deltaTemperature = obj.brakeTemperature - obj.ambientBrakeTemperature;
+      deltaTemperature = obj.brakeTemperature - obj.AMBIENT_BRAKE_TEMPERATURE;
       temperatureDerivative = obj.CalculateTemperatureDerivative(deltaTemperature);
       obj.brakeTemperature = obj.brakeTemperature + temperatureDerivative*deltaT;
     end
@@ -95,33 +95,34 @@ classdef TruckModel < handle
     %Physics functions
     function gravityForce = CalculateGravityForce(obj, slope)
       g = obj.GetGravityConstant;
-      gravityForce = obj.mass*g*sind(slope);
+      gravityForce = obj.MASS*g*sind(slope);
     end
     
     function brakingForce = CalculateBrakingForce(obj)
       g = obj.GetGravityConstant;
-      if obj.brakeTemperature < obj.maxBrakeTemperature - 100
-        brakingForce = obj.mass*g/20*obj.brakePressure;
+      if obj.brakeTemperature < obj.MAX_BRAKE_TEMPERATURE - 100
+        brakingForce = obj.MASS*g/20 *obj.brakePressure;
       else
-        tmp = exp(-(obj.brakeTemperature-(obj.maxBrakeTemperature-100))/100); %Too complicated?
-        brakingForce = obj.mass*g/20*obj.brakePressure * tmp;
+        tmp = obj.brakeTemperature - (obj.MAX_BRAKE_TEMPERATURE-100);
+        tmp = exp(-tmp/100);
+        brakingForce = obj.MASS*g/20 * obj.brakePressure * tmp;
       end
     end
         
     function engineBrakingForce = CalculateEngineBrakingForce(obj)
-      engineBrakingForce = obj.gearBrakingFactors(obj.gear) * obj.engineBrakingConstant;
+      engineBrakingForce = obj.GEAR_BRAKING_FACTORS(obj.gear) * obj.ENGINE_BRAKING_CONSTANT;
     end
     
     function acceleration = CalculateAcceleration(obj, gravityForce, ...
         brakingForce, engineBrakingForce)
-      acceleration = (gravityForce - brakingForce - engineBrakingForce)/obj.mass;
+      acceleration = (gravityForce - brakingForce - engineBrakingForce)/obj.MASS;
     end
     
     function temperatureDerivative = CalculateTemperatureDerivative(obj, deltaTemperature)
       if obj.brakePressure < 0.01
-        temperatureDerivative =  -deltaTemperature/obj.tau;
+        temperatureDerivative =  -deltaTemperature/obj.TAU;
       else
-        temperatureDerivative = obj.Ch * obj.brakePressure;
+        temperatureDerivative = obj.HEAT_CONSTANT * obj.brakePressure;
       end
     end
   end %end methods
