@@ -16,7 +16,7 @@ thresholdInterval = weightInterval;
 %% Genetic Algorithm
 NUMBER_OF_GENERATIONS = 750;
 COPIES_OF_BEST_INDIVIDUAL = 1;
-HOLDOUT_THRESHOLD = realmax; %No. generations to wait for improvement before termination
+HOLDOUT_THRESHOLD = 100; %No. generations to wait for improvement before termination
 
 populationSize = 100;
 [nbrOfWeights, nbrOfThresholds] = GetNbrOfWeights(networkDimensions);
@@ -66,12 +66,27 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
   else
     holdoutStrikes = holdoutStrikes + 1;
     if holdoutStrikes == HOLDOUT_THRESHOLD
-      fprintf(strcat('Optimization terminated due to no increase in',  ...
+      fprintf(strcat('Optimization terminated due to no increase of',  ...
         ' maximum validation fitness in %d generations.\n'), HOLDOUT_THRESHOLD)
       maximumTrainingFitness(iGeneration+1:end) = [];
       maximumValidationFitness(iGeneration+1:end) = [];
       break
     end
+  end
+      
+  clf
+  hold on
+  plot(maximumTrainingFitness(1:iGeneration))
+  plot(maximumValidationFitness(1:iGeneration))
+  set(gca, 'FontSize', 14)
+  xlabel('Generation')
+  ylabel('Fitness')
+  legend({'Training', 'Validation'}, 'Location', 'southeast')
+  drawnow
+  
+  if iGeneration == NUMBER_OF_GENERATIONS
+    fprintf('All %d generations completed.\n', NUMBER_OF_GENERATIONS);
+    break
   end
   
   tempPopulation = population;
@@ -112,40 +127,7 @@ for iGeneration = 1:NUMBER_OF_GENERATIONS
       iGeneration, NUMBER_OF_GENERATIONS, t)
     t = tic;
   end
-  
-  clf
-  hold on
-  plot(maximumTrainingFitness(1:iGeneration))
-  plot(maximumValidationFitness(1:iGeneration))
-  set(gca, 'FontSize', 14)
-  xlabel('Generation')
-  ylabel('Fitness')
-  legend({'Training', 'Validation'}, 'Location', 'southeast')
-  drawnow
  
-end
-
-%Final Evaluation
-trainingFitness = zeros(populationSize, 1);
-validationFitness = zeros(populationSize, 1);
-iBestIndividual = 0;
-for iIndividual = 1:populationSize
-  chromosome = population(iIndividual,:);
-  network = DecodeChromosome(chromosome, networkDimensions, ...
-    weightInterval, thresholdInterval);
-  trainingFitness(iIndividual) = EvaluateIndividual(network, iTrainingSet);
-  if trainingFitness(iIndividual) > maximumTrainingFitness(iGeneration)
-    maximumTrainingFitness(iGeneration) = trainingFitness(iIndividual);
-    iBestIndividual = iIndividual;
-    bestNetwork = network;
-  end
-end
-bestIndividual = population(iBestIndividual, :);
-
-maximumValidationFitness(iGeneration) = EvaluateIndividual(bestNetwork, iValidationSet);
-if maximumValidationFitness(iGeneration) > maximumValidationFitnessSoFar
-  maximumValidationFitnessSoFar = maximumValidationFitness(iGeneration);
-  bestValidationIndividual = bestIndividual;
 end
 
 

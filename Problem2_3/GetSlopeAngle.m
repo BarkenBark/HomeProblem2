@@ -45,7 +45,7 @@ elseif (iDataSet == 3)
  elseif (iSlope == 2)
    alpha = 3 + cos(x/40) - sin(sqrt(3)*x/160);
  elseif (iSlope == 3)
-   alpha = 5.5 + 1.5*sin(sqrt(2 0)*x/100) - cos(x/80);
+   alpha = 5.5 + 1.5*sin(sqrt(20)*x/100) - cos(x/80);
  elseif (iSlope == 4)
    alpha = 1 + (x/500) + sin(x/200);
  elseif (iSlope == 5)

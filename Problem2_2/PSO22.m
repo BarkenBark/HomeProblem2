@@ -41,6 +41,7 @@ for iIteration = 1:nbrOfIterations
   
 end
 
+%Final evaluation
 [functionValue, functionBestValue] = EvaluateParticles(swarm);
 swarmBestPosition = GetSwarmBestPosition(swarm, functionValue, ...
   functionBestValue, bestDefinition);

@@ -1,8 +1,8 @@
 %% TestProgram
 iDataSet = 3;
-iSlope = 3;
+iSlope = 1;
 
-netToLoad = 'BestNetwork-Oct8-7.mat';
+netToLoad = 'BestNetwork.mat';
 result = load(netToLoad);
 bestNetwork = result.BestNetwork;
 
