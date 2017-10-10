@@ -8,8 +8,8 @@ function [functionValue, functionBestValue] = EvaluateParticles(swarm)
     particle = swarm(iParticle);
     position = particle.Position;
     bestPosition = particle.BestPosition;
-    functionValue(iParticle) = f(position);
-    functionBestValue(iParticle) = f(bestPosition);   
+    functionValue(iParticle) = ObjectiveFunction(position);
+    functionBestValue(iParticle) = ObjectiveFunction(bestPosition);   
   end
 
 end

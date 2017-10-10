@@ -45,6 +45,6 @@ end
 [functionValue, functionBestValue] = EvaluateParticles(swarm);
 swarmBestPosition = GetSwarmBestPosition(swarm, functionValue, ...
   functionBestValue, bestDefinition);
-minimum = f(swarmBestPosition);
+minimum = ObjectiveFunction(swarmBestPosition);
 
 fprintf('Minimum f(x,y)=%.6f found at (x,y)=(%.6f,%.6f).\n', minimum, swarmBestPosition);
